@@ -1,0 +1,59 @@
+.telegram {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #0088cc;
+  width: fit-content;
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.telegram:hover {
+  background-color: #006699;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.telegram:active {
+  background-color: #005580;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
+}
+.email {
+  background-color: #d44638; /* لون زر Gmail */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.email a {
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.email span {
+  margin-right: 8px;
+}
+
+.email:hover {
+  background-color: #c1372a;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.email:active {
+  background-color: #a62e23;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
+}

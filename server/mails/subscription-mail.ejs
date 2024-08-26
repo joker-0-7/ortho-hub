@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--[if !mso]><!-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!--<![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subscription Receipt</title>
+    <style type="text/css">
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f3f4f6;
+        color: #333333;
+      }
+      table {
+        border-spacing: 0;
+        width: 100%;
+        text-wrap: nowrap;
+      }
+      .outer {
+        margin: 0 auto;
+        width: 100%;
+        max-width: 600px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .header {
+        background-color: #007bff;
+        padding: 20px;
+        text-align: center;
+        color: #ffffff;
+        font-size: 24px;
+      }
+      .content {
+        padding: 20px;
+      }
+      .content p {
+        margin: 0 0 15px;
+        line-height: 1.6;
+      }
+      .content h1 {
+        font-size: 20px;
+        margin: 0 0 15px;
+        color: #007bff;
+      }
+      .content .details {
+        background-color: #f9fafb;
+        padding: 10px;
+        border-radius: 4px;
+        margin: 15px 0;
+      }
+      .content .details table {
+        width: 100%;
+      }
+      .content .details td {
+        padding: 8px 0;
+      }
+      .content .details .label {
+        font-weight: bold;
+        color: #555555;
+      }
+      .content .details .value {
+        text-align: right;
+        color: #333333;
+      }
+      .footer {
+        background-color: #f3f4f6;
+        padding: 10px;
+        text-align: center;
+        font-size: 12px;
+        color: #999999;
+      }
+    </style>
+  </head>
+  <body>
+    <table class="outer">
+      <tr>
+        <td class="header">Subscription Receipt</td>
+      </tr>
+      <tr>
+        <td class="content">
+          <h1>Hello <%= user.name %>,</h1>
+          <p>
+            Thank you for your subscription! Here are the details of your recent
+            purchase:
+          </p>
+
+          <div class="details">
+            <table>
+              <tr>
+                <td class="label">Receipt number:</td>
+                <td class="value"><%= user.id %></td>
+              </tr>
+              <tr>
+                <td class="label">Start Date:</td>
+                <td class="value"><%= user.subscriptionStart %></td>
+              </tr>
+              <tr>
+                <td class="label">End Date:</td>
+                <td class="value"><%= user.subscriptionEnd %></td>
+              </tr>
+              <tr>
+                <td class="label">Amount Paid:</td>
+                <td class="value">$<%= user.pay %></td>
+              </tr>
+            </table>
+          </div>
+
+          <p>
+            If you have any questions or need support, feel free to
+            <a href="https://t.me/@OrthoMCQHub" style="color: #007bff"
+              >contact us</a
+            >.
+          </p>
+          <p>Thank you for choosing our service!</p>
+        </td>
+      </tr>
+      <tr>
+        <td class="footer">
+          &copy;
+          <script>
+            document.write(new Date().getFullYear());
+          </script>
+          OrthoMCQHub. All rights reserved.
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
