@@ -26,7 +26,10 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/api/v1/", indexRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/questions", questionsRouter);
-
+app.use(
+  "/public/images",
+  express.static(path.join(__dirname, "public/images"))
+);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

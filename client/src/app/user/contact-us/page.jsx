@@ -9,7 +9,7 @@ function page() {
   return (
     <div className="contact-us min-h-all pt-20">
       <div className="container mx-auto min-h-all flex justify-center items-center">
-        <div className="card p-4 rounded-md shadow-md">
+        <div className="card p-4 rounded-md shadow-md lg:w-1/2 max-sm:w-full">
           <p>
             The hands-down, sharpest and friendliest education support team
             available to you. We love hearing from our customers and care deeply
@@ -18,7 +18,7 @@ function page() {
             grateful that you talked to us. You can send us a message about
             anything. Go ahead, try it!
           </p>
-          <div className="flex justify-evenly items-center">
+          <div className="flex justify-evenly items-center my-3">
             <a
               href={process.env.NEXT_PUBLIC_TELEGRAM}
               target="_blank"
@@ -29,14 +29,17 @@ function page() {
                 <BsTelegram />
               </span>
             </a>
-            <Button className={style.email}>
-              <a href={process.env.NEXT_PUBLIC_EMAIL} target="_blank">
-                <span>Send us an email</span>
-                <span>
-                  <BiLogoGmail />
-                </span>
-              </a>
-            </Button>
+
+            <a
+              href={process.env.NEXT_PUBLIC_EMAIL}
+              target="_blank"
+              className={style.email}
+            >
+              <span>Send us an email</span>
+              <span className="mx-2">
+                <BiLogoGmail />
+              </span>
+            </a>
           </div>
         </div>
       </div>

@@ -6,7 +6,7 @@ export default function RootLayout({ children }) {
   return (
     <UserProvider>
       <UserRouter>
-        <nav>
+        <nav style={{ zIndex: "999" }}>
           <Navbar />
         </nav>
         {children}

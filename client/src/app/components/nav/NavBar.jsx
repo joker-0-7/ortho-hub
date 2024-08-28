@@ -72,7 +72,7 @@ const Navbar = () => {
                   key={id}
                   className="nav-links px-4 cursor-pointer capitalize font-medium text-light hover:scale-105 hover:text-main duration-200 link-underline"
                 >
-                  <Link href={`/user/${link}`}>{name}</Link>
+                  <Link href={`${link}`}>{name}</Link>
                 </li>
               ))}
             </>
@@ -105,26 +105,26 @@ const Navbar = () => {
           <ul className="flex flex-col justify-center items-center absolute top-0 left-0 w-full h-screen bg-gradient-to-b from-black to-gray-800 text-gray-500">
             {state && state.user && state.accessToken ? (
               <>
-                {linksUser.map(({ id, link }) => (
+                {linksUser.map(({ id, link, name }) => (
                   <li
                     key={id}
-                    className="px-4 cursor-pointer capitalize py-6 text-4xl"
+                    className="px-4 cursor-pointer capitalize py-6 text-2xl"
                   >
                     <Link onClick={() => setNav(!nav)} href={`/user/${link}`}>
-                      {link}
+                      {name}
                     </Link>
                   </li>
                 ))}
               </>
             ) : (
               <>
-                {links.map(({ id, link }) => (
+                {links.map(({ id, link, name }) => (
                   <li
                     key={id}
-                    className="px-4 cursor-pointer capitalize py-6 text-4xl"
+                    className="px-4 cursor-pointer capitalize py-6 text-2xl"
                   >
-                    <Link onClick={() => setNav(!nav)} href={`/${link}`}>
-                      {link}
+                    <Link onClick={() => setNav(!nav)} href={`${link}`}>
+                      {name}
                     </Link>
                   </li>
                 ))}

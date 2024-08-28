@@ -13,8 +13,8 @@ function Page() {
     router.push("/user/generate/options");
   };
   return (
-    <div className="page">
-      <div className="container mx-auto">
+    <div className="page pt-20">
+      <div className="container mx-auto min-h-all flex justify-center items-center">
         <div className="title py-5">
           <h1 className="text-xl font-bold">quiz options</h1>
           <p className="text-gray-500 dark:text-gray-400 py-2">
@@ -28,7 +28,7 @@ function Page() {
                 handleModeChange("exam");
               }}
               Icon=""
-              desc="This mode is designed to simulate the actual timed exam experience."
+              desc="This mode aims to replicate the real timed exam environment, providing a realistic practice experience under actual exam conditions."
               mode="Exam"
             />
           </div>
@@ -38,7 +38,7 @@ function Page() {
                 handleModeChange("tutor");
               }}
               Icon=""
-              desc="This mode allows you to move question-by-question"
+              desc="This mode allows you to move question-by-question, seeing the correct answer and detailed explanation of it after every question."
               mode="Tutor"
             />
           </div>
