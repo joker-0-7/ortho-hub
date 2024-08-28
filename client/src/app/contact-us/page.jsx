@@ -111,7 +111,7 @@ function Page() {
                   className="shadow-sm"
                   onChange={handleChange}
                   value={data.subject}
-                  placeholder="Let us know how we can help you"
+                  placeholder="Subject"
                   required
                 />
               </div>
@@ -129,7 +129,7 @@ function Page() {
                   value={data.message}
                   rows={6}
                   className="shadow-sm"
-                  placeholder="Leave a comment..."
+                  placeholder="Let us know how we can help you"
                   defaultValue={""}
                 />
               </div>

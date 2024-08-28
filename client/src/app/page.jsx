@@ -13,15 +13,17 @@ export default function Home() {
         <MainNav />
       </nav>
       <div className="pt-20 min-h-all">
-        <section className={`${styles.img} lg:min-h-half max-sm:h-screen`}>
+        <section
+          className={`${styles.img} lg:min-h-half max-sm:h-screen relative overflow-hidden`}
+        >
           <div
-            className={`${styles.overlay} bg-dark bg-opacity-70 lg:h-half max-sm:h-screen w-full absolute`}
+            className={`${styles.overlay} bg-dark bg-opacity-70 min-h-full w-full absolute`}
           ></div>
           <div className={`container mx-auto`}>
             <div
-              className={`first-sec lg:h-half max-sm:h-screen py-5 ${styles.first}`}
+              className={`first-sec lg:min-h-half max-sm:min-h-screen py-5 ${styles.first}`}
             >
-              <div className="lg:w-1/2 sm:w-full flex flex-col justify-evenly lg:h-half max-sm:h-screen">
+              <div className="lg:w-1/2 sm:w-full flex flex-col justify-evenly lg:min-h-half max-sm:min-h-screen">
                 <div className="title">
                   <h1 className="text-xl font-bold text-light">
                     welcome to <span className="text-main">OrthoMCQHub</span>

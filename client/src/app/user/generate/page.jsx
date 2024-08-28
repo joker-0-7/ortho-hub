@@ -14,11 +14,11 @@ function Page() {
   };
   return (
     <div className="page pt-20">
-      <div className="container mx-auto min-h-all flex justify-center items-center">
+      <div className="container mx-auto min-h-all flex justify-center items-center flex-col">
         <div className="title py-5">
           <h1 className="text-xl font-bold">quiz options</h1>
           <p className="text-gray-500 dark:text-gray-400 py-2">
-            chose mode you want
+            Choose the session mode
           </p>
         </div>
         <div className="grid lg:grid-cols-2 sm:grid-cols-1 gap-10">
