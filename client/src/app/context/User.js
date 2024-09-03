@@ -18,13 +18,10 @@ const UserProvider = ({ children }) => {
     if (storedAuth) {
       try {
         const parsedAuth = JSON.parse(storedAuth);
-        console.log("Parsed auth data:", parsedAuth);
         setState(parsedAuth);
       } catch (error) {
         console.error("Error parsing auth data from localStorage", error);
       }
-    } else {
-      console.log("No auth data found in localStorage");
     }
   };
 
@@ -38,11 +35,8 @@ const UserProvider = ({ children }) => {
   // }, []);
   const fetchWithAuth = async () => {
     if (!state.accessToken) {
-      console.log("State is not yet initialized or missing accessToken");
       return;
     }
-
-    console.log(state);
 
     try {
       const response = await fetch(
@@ -58,8 +52,6 @@ const UserProvider = ({ children }) => {
 
       if (!response.ok) {
         const res = await response.json();
-        console.log(res);
-
         if (
           response.status === 401 &&
           !window.location.pathname.split("/").includes("login")
@@ -85,7 +77,7 @@ const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const excludedPaths = ["login", "register", "payment"];
+    const excludedPaths = ["login", "register", "payment", "free-trial"];
 
     const isExcludedPath = excludedPaths.some((excludedPath) =>
       pathName.includes(excludedPath)
@@ -93,9 +85,7 @@ const UserProvider = ({ children }) => {
 
     if (client && state.accessToken && !isExcludedPath) {
       fetchWithAuth()
-        .then((data) => {
-          console.log("Data:", data);
-        })
+        .then((data) => {})
         .catch((error) => {
           console.error("Error:", error);
         });

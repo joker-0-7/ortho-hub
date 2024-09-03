@@ -11,15 +11,15 @@ class PayPalClient extends paypal.core.PayPalHttpClient {
   }
 }
 
-let environment = new paypal.core.SandboxEnvironment(
-  process.env.PAYPAL_CLIENT_ID,
-  process.env.PAYPAL_CLIENT_SECRET
-);
-
-// let environment = new paypal.core.LiveEnvironment(
+// let environment = new paypal.core.SandboxEnvironment(
 //   process.env.PAYPAL_CLIENT_ID,
 //   process.env.PAYPAL_CLIENT_SECRET
 // );
+
+let environment = new paypal.core.LiveEnvironment(
+  process.env.PAYPAL_CLIENT_ID,
+  process.env.PAYPAL_CLIENT_SECRET
+);
 
 let client = new PayPalClient(environment);
 

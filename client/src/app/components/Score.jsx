@@ -47,7 +47,7 @@ function Score({ answersQuiz, exams, router, submitExam, disable }) {
               Please wait
             </>
           ) : (
-            <>Save Score</>
+            <>Submit Your Results</>
           )}
         </Button>
       </div>

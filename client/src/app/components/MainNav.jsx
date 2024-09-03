@@ -49,7 +49,7 @@ const MainNav = () => {
         </ul>
         <div className="flex items-center justify-between">
           <Button className="bg-main text-light px-5 py-2 mx-2 rounded-lg border-2 border-main">
-            <Link href="/user/login">Free Trial</Link>
+            <Link href="/user/login">Login</Link>
           </Button>
           <Button className="bg-transparent text-main px-5 py-2 rounded-lg border-main border-2 hover:bg-main hover:text-light duration-200">
             <Link href="/user/register">Register</Link>

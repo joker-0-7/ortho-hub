@@ -1,12 +1,25 @@
 "use client";
-import Image from "next/image";
 import styles from "./page.module.css";
 import { Button } from "reactstrap";
 import Link from "next/link";
 import Footer from "./components/footer/Footer";
 import MainNav from "./components/MainNav";
+import dynamic from "next/dynamic";
+import Loader from "./components/loader/Loader";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function Home() {
+  const router = useRouter();
+  const Section = dynamic(() => import("./components/Section"), {
+    ssr: false,
+    loading: () => <Loader />,
+  });
+  useEffect(() => {
+    const state = JSON.parse(window.localStorage.getItem("auth"));
+    if (state?.user && state?.accessToken) router.push("/user");
+  }, []);
   return (
     <main className="min-h-screen">
       <nav style={{ zIndex: 222 }} className="relative">
@@ -14,154 +27,135 @@ export default function Home() {
       </nav>
       <div className="pt-20 min-h-all">
         <section
-          className={`${styles.img} lg:min-h-half max-sm:h-screen relative overflow-hidden`}
+          className={`${styles.img} lg:min-h-all max-sm:h-all relative overflow-hidden`}
         >
           <div
             className={`${styles.overlay} bg-dark bg-opacity-70 min-h-full w-full absolute`}
           ></div>
-          <div className={`container mx-auto`}>
+          <div className="container mx-auto">
             <div
-              className={`first-sec lg:min-h-half max-sm:min-h-screen py-5 ${styles.first}`}
+              className={`first-sec lg:min-h-all max-sm:min-h-all py-5 ${styles.first}`}
             >
-              <div className="lg:w-1/2 sm:w-full flex flex-col justify-evenly lg:min-h-half max-sm:min-h-screen">
-                <div className="title">
-                  <h1 className="text-xl font-bold text-light">
-                    welcome to <span className="text-main">OrthoMCQHub</span>
-                  </h1>
-                </div>
-                <div className="description text-lg text-light">
-                  <p>
-                    We are delighted to introduce our comprehensive FRCS/EBOT
-                    exam preparation system, now available online through our
-                    OrthoMCQHub website.
-                  </p>
-                  <p>
-                    OrthoMCQHub is dedicated to providing you with the most
-                    effective preparation system for your real exam. To achieve
-                    this, we have done our best to develop a question bank
-                    filled with ideal practice questions. Each question is
-                    paired with detailed, evidence-based explanations of the
-                    correct answer, specifically designed to help you pass your
-                    exam on the first attempt.
-                  </p>
-                </div>
-                <div className="flex items-center justify-between">
-                  <Button className="bg-main text-light px-5 py-2 rounded-lg border-2 border-main">
-                    <Link href="/user/login">Login</Link>
-                  </Button>
-                  <Button className="bg-transparent text-main px-5 py-2 rounded-lg border-main border-2 hover:bg-main hover:text-light duration-200">
-                    <Link href="/about-us">learn more</Link>
-                  </Button>
+              <div className="sm:w-full flex flex-col justify-evenly lg:min-h-all max-sm:min-h-all text-center">
+                <div className="flex justify-evenly items-center lg:min-h-[74vh] max-sm:min-h-all flex-col">
+                  <div className="title">
+                    <h1 className="lg:text-6xl max-sm:text-4xl font-bold text-light">
+                      Welcome to <span className="text-main">OrthoMCQHub</span>
+                    </h1>
+                  </div>
+                  <div className="description text-2xl text-light lg:w-5/6 max-sm:w-full">
+                    <p>
+                      We are delighted to introduce our comprehensive FRCS/EBOT
+                      exam preparation system, now available online through our
+                      OrthoMCQHub website. OrthoMCQHub is dedicated to providing
+                      you with the most effective preparation system for your
+                      real exam. To achieve this, we have done our best to
+                      develop a question bank filled with ideal practice
+                      questions. Each question is paired with detailed,
+                      evidence-based explanations of the correct answer,
+                      specifically designed to help you pass your exam on the
+                      first attempt.
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-center">
+                    <Button className="bg-main text-light px-5 py-2 rounded-lg border-2 border-main">
+                      <Link href="/user/free-trial">Start Free Trial!!</Link>
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
-        <section className="py-5 bg-light min-h-half flex justify-center items-center">
-          <div className="container mx-auto">
-            <div className="grid lg:grid-cols-2 sm:grid-cols-1 items-center justify-items-center">
-              <div className="lg:w-1/2 sm:w-full">
-                <Image
-                  src="/assets/1.png"
-                  alt="left doc"
-                  width={1000}
-                  height={1500}
-                />
-              </div>
-              <div className="lg:w-1/2 sm:w-full lg:py-0 max-sm:py-3">
-                <h1 className="text-xl font-bold text-main ">
-                  Our primary goal is your success.
-                </h1>
-                <p className="text-gray-500 dark:text-gray-400">
-                  We offer unique, never-before-seen questions that cover almost
-                  every topic you might encounter in your exam. It is well known
-                  that the FRCS/EBOT exams not only test your knowledge but also
-                  require good clinical judgment, making them challenging to
-                  pass. We are here to guide you confidently through each step
-                  of your preparation journey.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section className="service py-5 bg-dark text-light min-h-half flex justify-center items-center">
-          <div className="container mx-auto">
-            <div className="grid lg:grid-cols-2 sm:grid-cols-1 items-center justify-items-center">
-              <div className="lg:w-1/2 sm:w-full lg:py-0 max-sm:py-3">
-                <h1 className="text-xl font-bold text-main">
-                  Detailed Answer Explanations:
-                </h1>
-                <p className="text-light dark:text-gray-400">
-                  When you finish a question, you&apos;ll gain access to an
+        <div>
+          <Section
+            styles={styles}
+            style="primary"
+            mode="light"
+            title="Our primary goal is your success."
+            text="
+           We offer unique, never-before-seen questions that cover almost
+              every topic you might encounter in your exam. It is well known
+              that the FRCS/EBOT exams not only test your knowledge but also
+              require good clinical judgment, making them challenging to pass.
+              We are here to guide you confidently through each step of your
+              preparation journey.
+          "
+          />
+        </div>
+        <div>
+          <Section
+            styles={styles}
+            style="detailed"
+            mode="dark"
+            reverse={true}
+            title="Detailed Answer Explanations:"
+            text="
+                When you finish a question, you'll gain access to an
                   in-depth explanation that clarifies the problem and explains
                   why specific answer options are correct or incorrect. Our
                   step-by-step explanations will help teach the critical
                   thinking skills necessary to master your exam
-                </p>
-              </div>
-              <div className="lg:w-1/2 sm:w-full">
-                <Image
-                  src="/assets/2.png"
-                  alt="left doc"
-                  width={1000}
-                  height={1500}
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-        <section className="py-5 bg-light min-h-half flex justify-center items-center">
-          <div className="container mx-auto">
-            <div className="grid lg:grid-cols-2 sm:grid-cols-1 items-center justify-items-center">
-              <div className="lg:w-1/2 sm:w-full">
-                <Image
-                  src="/assets/3.png"
-                  alt="left doc"
-                  width={1000}
-                  height={1500}
-                />
-              </div>
-              <div className="lg:w-1/2 sm:w-full lg:py-0 max-sm:py-3">
-                <h1 className="text-xl font-bold text-main">
-                  Track your performance:
-                </h1>
-                <p className="text-gray-500 dark:text-gray-400">
+          "
+          />
+        </div>
+        <div>
+          <Section
+            styles={styles}
+            style="track"
+            mode="light"
+            title="Track your performance:"
+            text="
                   Create custom tests and quizzes from our thousands of practice
                   questions to get comfortable with what you’ll experience on
                   exam day. Our licensed authors continuously update the
                   material to ensure alignment with the latest content outline.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-        <hr className="h-1 bg-vDark" />
-        <section className="py-5 bg-light min-h-half flex justify-center items-center">
+          "
+          />
+        </div>
+        <section className="py-5 bg-dark min-h-[90vh] flex justify-center items-center">
           <div className="container mx-auto">
-            <div className="grid grid-cols-1 items-center justify-items-center">
-              <p className="text-xl">
-                We will show an example of one the exam well known question?
-              </p>
+            <div className="grid lg:grid-cols-2 max-sm:grid-cols-1 items-center justify-items-center">
+              <div className="my-3">
+                <h1 className="lg:text-6xl max-sm:text-4xl my-5 font-bold text-light ">
+                  All the answers, right here.
+                </h1>
+                <p className="text-xl text-light">
+                  OrthoMCQHub is a collection of meticulously prepared
+                  high-quality Multiple Choice Questions (MCQs) to assist in
+                  successfully passing orthopaedic exams. such as:
+                </p>
+                <ul
+                  className="list-disc text-light"
+                  style={{ listStyle: "inside" }}
+                >
+                  <li>UK and International FRCS Exams</li>
+                  <li>EBOT Fellowship Exam</li>
+                  <li>SICOT Diploma Exam</li>
+                  <li>Prometric Exam</li>
+                </ul>
+              </div>
               <div>
                 <Image
                   src="/assets/question.png"
                   alt="left doc"
                   width={1000}
+                  className="scale-110 duration-200"
                   height={1500}
                 />
               </div>
             </div>
           </div>
         </section>
-        <section className="bg-dark" id="pricing">
+        <section className="bg-light" id="pricing">
           <div className="p-10">
             <div className="relative max-w-7xl mx-auto">
               <div className="max-w-lg mx-auto rounded-lg shadow-lg overflow-hidden lg:max-w-none lg:flex">
-                <div className="flex-1 px-6 py-8 lg:p-12 bg-light">
-                  <h3 className="text-2xl font-extrabold text-dark sm:text-3xl">
+                <div className="flex-1 px-6 py-8 lg:p-12 bg-dark">
+                  <h3 className="text-2xl font-extrabold text-light sm:text-3xl">
                     90-Day Access
                   </h3>
-                  <p className="mt-6 text-base text-dark sm:text-lg">
+                  <p className="mt-6 text-base text-light sm:text-lg">
                     Take your FRCS/EBOT exam preparation to the next level!
                   </p>
                   <div className="mt-8">
@@ -188,7 +182,7 @@ export default function Home() {
                             />
                           </svg>
                         </div>
-                        <p className="ml-3 text-dark">
+                        <p className="ml-3 text-light">
                           Thousands of Exam-based MCQs
                         </p>
                       </li>
@@ -208,7 +202,9 @@ export default function Home() {
                             />
                           </svg>
                         </div>
-                        <p className="ml-3 text-dark">Custom Qbank sessions.</p>
+                        <p className="ml-3 text-light">
+                          Custom Qbank sessions.
+                        </p>
                       </li>
                       <li className="flex items-start lg:col-span-1">
                         <div className="flex-shrink-0">
@@ -226,7 +222,7 @@ export default function Home() {
                             />
                           </svg>
                         </div>
-                        <p className="ml-3 text-dark">
+                        <p className="ml-3 text-light">
                           Detailed answer Explanation.
                         </p>
                       </li>
@@ -246,7 +242,7 @@ export default function Home() {
                             />
                           </svg>
                         </div>
-                        <p className="ml-3 text-dark">Performance analysis.</p>
+                        <p className="ml-3 text-light">Performance analysis.</p>
                       </li>
                     </ul>
                   </div>
@@ -267,7 +263,7 @@ export default function Home() {
                         href="#"
                         className="flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-main hover:bg-mainD duration-200"
                       >
-                        Buy now
+                        Join us now
                       </a>
                     </div>
                   </div>
