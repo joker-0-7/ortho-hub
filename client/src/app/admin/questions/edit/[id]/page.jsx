@@ -254,7 +254,7 @@ const initialState = {
   question: "",
   answers: ["", ""],
   correct: "",
-  image: "",
+  images: [],
   explanation: "",
   subjects: [],
   isFree: false,
@@ -267,6 +267,13 @@ function reducer(state, action) {
       return { ...state, ...action.payload };
     case "SET_DISABLE":
       return { ...state, disable: action.payload };
+    case "ADD_IMAGES":
+      return { ...state, images: [...state.images, ...action.payload] };
+    case "REMOVE_IMAGE":
+      return {
+        ...state,
+        images: state.images.filter((_, i) => i !== action.payload),
+      };
     default:
       return state;
   }
@@ -280,12 +287,18 @@ function Page({ params }) {
 
   const handleChangeAnswer = (e, answerIndex) => {
     const { value } = e.target;
+    const updatedAnswers = state.answers.map((answer, i) =>
+      i === answerIndex ? value : answer
+    );
+
+    if (updatedAnswers[updatedAnswers.length - 1] !== "") {
+      updatedAnswers.push("");
+    }
+
     dispatch({
       type: "SET_QUESTION",
       payload: {
-        answers: state.answers.map((answer, i) =>
-          i === answerIndex ? value : answer
-        ),
+        answers: updatedAnswers,
       },
     });
   };
@@ -294,7 +307,9 @@ function Page({ params }) {
     dispatch({ type: "SET_DISABLE", payload: true });
 
     let formData = new FormData();
-    formData.append("img", state.image);
+    state.images.forEach((image) => {
+      formData.append("images", image);
+    });
     formData.append("sources", JSON.stringify(state.sources));
     formData.append("question", state.question);
     formData.append("answers", JSON.stringify(state.answers));
@@ -371,6 +386,7 @@ function Page({ params }) {
         </Button>
       </div>
       <QuestionForm
+      page="edit"
         question={state}
         setQuestion={(newData) =>
           dispatch({ type: "SET_QUESTION", payload: newData })

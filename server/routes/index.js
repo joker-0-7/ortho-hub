@@ -9,17 +9,21 @@ const storage = multer.diskStorage({
   },
   filename: function (req, file, cb) {
     const mimetype = file.mimetype.split("/")[1];
-    const uniqueSuffix = `question-${Date.now()}.${mimetype}`;
-    req.uniqueSuffix = uniqueSuffix;
+    const uniqueSuffix = `question-${Date.now()}-${Math.round(
+      Math.random() * 1e9
+    )}.${mimetype}`;
+    if (!req.fileNames) req.fileNames = [];
+    req.fileNames.push(uniqueSuffix);
     cb(null, uniqueSuffix);
   },
 });
+
 const upload = multer({ storage: storage });
 /* GET home page. */
 router.get("/", questionController.getQuestionsCount);
 router.post(
   "/add-question",
-  upload.single("img"),
+  upload.array("images"),
   questionController.addQuestion
 );
 router.delete("/question/:id", questionController.deleteQuestion);

@@ -33,8 +33,6 @@ export const AdminProvider = ({ children }) => {
 
           if (response.ok) {
             const data = await response.json();
-            console.log(response);
-
             if (data.user && data.user.role === "admin") {
               setIsAdmin(true);
             } else {

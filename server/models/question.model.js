@@ -8,7 +8,7 @@ var QuestionSchema = new Schema(
     answers: { type: Array, required: true },
     question: { type: String, required: true },
     correct: { type: String, required: true },
-    image: { type: String },
+    images: { type: Array },
     explanation: { type: String },
     isFree: { type: Boolean },
   },

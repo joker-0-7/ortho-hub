@@ -152,8 +152,7 @@ const getQuestions = async (req, res) => {
 };
 const addQuestion = CatchAsyncError(async (req, res, next) => {
   const data = req.body;
-  console.log(data);
-  data.image = req.uniqueSuffix || "";
+  const images = req.fileNames || [];
   const question = await questionModel({
     sources: JSON.parse(data.sources) || [],
     question: data.question,
@@ -162,7 +161,7 @@ const addQuestion = CatchAsyncError(async (req, res, next) => {
     explanation: data.explanation,
     isFree: data.isFree,
     subjects: JSON.parse(data.subjects) || [],
-    image: data.image,
+    images,
   });
   try {
     question.save();
