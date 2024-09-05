@@ -104,7 +104,7 @@ function Page() {
         nextBtn();
         setShowAns(false);
       }
-      if (e.target.innerHTML === "Show Result") {
+      if (e.target.innerHTML === "Finish Test") {
         nextBtn();
       }
     }
@@ -121,7 +121,6 @@ function Page() {
         return [...prevHandleAns, newAnswer];
       }
     });
-    console.log(handleAns);
   };
   const formatTime = (totalSeconds) => {
     const minutes = Math.floor(totalSeconds / 60);

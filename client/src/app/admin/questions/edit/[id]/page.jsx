@@ -385,13 +385,14 @@ function Page({ params }) {
           )}
         </Button>
       </div>
-      <QuestionForm
+      <QuestionForm dispatch={dispatch} question={state} page="edit" />
+      {/* <QuestionForm
       page="edit"
         question={state}
         setQuestion={(newData) =>
           dispatch({ type: "SET_QUESTION", payload: newData })
         }
-      />
+      /> */}
       <div className="options flex justify-between gap-5 mb-5">
         <AnswerInputs
           answers={state.answers}

@@ -58,8 +58,8 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const solvedQuestions = await getSolvedQuestions(state?.accessToken)
-        setCount(solvedQuestions.length)
+        const solvedQuestions = await getSolvedQuestions(state?.accessToken);
+        setCount(solvedQuestions.length);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -76,7 +76,7 @@ export default function Dashboard() {
   };
   const onShowSizeChange = (current, size) => {
     setPageSize(size);
-    setCurrent(1); // تعيين الصفحة الحالية إلى 1 عند تغيير حجم الصفحة
+    setCurrent(1);
   };
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40 pt-20">
@@ -106,7 +106,7 @@ export default function Dashboard() {
                     Manage your previous questions
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="min-h-all">
                   <Table>
                     <TableHeader>
                       <TableRow>

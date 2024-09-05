@@ -1,11 +1,13 @@
 var express = require("express");
 const questionController = require("../controllers/questions.controller");
-const multer = require("multer");
+const fs = require("fs");
 var router = express.Router();
+const path = require("path");
+const multer = require("multer");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/images/");
+    cb(null, path.join(__dirname, "../uploads/tmp"));
   },
   filename: function (req, file, cb) {
     const mimetype = file.mimetype.split("/")[1];
@@ -19,7 +21,8 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-/* GET home page. */
+
+/* إعدادات الراوتر */
 router.get("/", questionController.getQuestionsCount);
 router.post(
   "/add-question",
@@ -27,11 +30,10 @@ router.post(
   questionController.addQuestion
 );
 router.delete("/question/:id", questionController.deleteQuestion);
-// router.get("/get-user-questions", questionController.getUserQuestion);
 router.get("/get-question/:id", questionController.getQuestion);
 router.patch(
   "/update-question/:id",
-  upload.single("img"),
+  upload.array("images"),
   questionController.updateQuestion
 );
 router.get("/get-questions/:current/:per", questionController.getQuestions);

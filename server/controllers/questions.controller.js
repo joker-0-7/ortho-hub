@@ -5,7 +5,8 @@ const SourceModal = require("../models/source.modal");
 const SubjectModal = require("../models/subject.modal");
 const userModel = require("../models/user.model");
 const { ErrorHandler } = require("../utils/ErrorHandler");
-
+const path = require("path");
+const fs = require("fs");
 const getQuestionsCount = CatchAsyncError(async (req, res, next) => {
   try {
     if (req?.current?.type === "free") {
@@ -19,15 +20,6 @@ const getQuestionsCount = CatchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler(err.message, 400));
   }
 });
-// const getUserQuestion = CatchAsyncError(async (req, res, next) => {
-//   try {
-//     const userId = req.current.id;
-//     const questions = await SolvedQuestion.findOne({ userId: userId });
-//     console.log(questions);
-//   } catch (err) {
-//     return next(new ErrorHandler(err.message, 400));
-//   }
-// });
 const createExam = CatchAsyncError(async (req, res, next) => {
   try {
     const data = req.body;
@@ -36,7 +28,6 @@ const createExam = CatchAsyncError(async (req, res, next) => {
     const solvedQuestionIds = solvedQuestions.map(
       (solvedQuestion) => solvedQuestion.questionId
     );
-
     let correctQuestions = [];
     let incorrectQuestions = [];
     let unusedQuestions = [];
@@ -62,12 +53,10 @@ const createExam = CatchAsyncError(async (req, res, next) => {
             match: query,
           })
           .exec();
-
         correctQuestions = correctSolvedQuestions
           .filter((sq) => sq.questionId !== null)
           .map((sq) => sq.questionId);
       }
-
       if (data.options.useAndInCorrect) {
         const incorrectSolvedQuestions = await SolvedQuestion.find({
           userId: id,
@@ -83,7 +72,6 @@ const createExam = CatchAsyncError(async (req, res, next) => {
           .filter((sq) => sq.questionId !== null)
           .map((sq) => sq.questionId);
       }
-
       if (data.options.unUsed) {
         unusedQuestions = await questionModel.find({
           ...query,
@@ -91,22 +79,17 @@ const createExam = CatchAsyncError(async (req, res, next) => {
         });
       }
     }
-
-    // دمج الأسئلة من الخيارات المختلفة
     let allQuestions = [
       ...correctQuestions,
       ...incorrectQuestions,
       ...unusedQuestions,
     ];
-
-    // إذا لم يتم العثور على أي أسئلة، حاول الحصول على أسئلة عشوائية من المادة والمصدر
     if (allQuestions.length === 0) {
       allQuestions = await questionModel.aggregate([
         { $match: query },
         { $sample: { size: data.count || 100 } },
       ]);
     } else {
-      // قم بخلط الأسئلة واختيار عدد معين منها
       allQuestions = allQuestions
         .sort(() => 0.5 - Math.random())
         .slice(0, data.count || allQuestions.length);
@@ -151,40 +134,77 @@ const getQuestions = async (req, res) => {
   }
 };
 const addQuestion = CatchAsyncError(async (req, res, next) => {
-  const data = req.body;
-  const images = req.fileNames || [];
-  const question = await questionModel({
-    sources: JSON.parse(data.sources) || [],
-    question: data.question,
-    answers: JSON.parse(data.answers) || [],
-    correct: data.correct,
-    explanation: data.explanation,
-    isFree: data.isFree,
-    subjects: JSON.parse(data.subjects) || [],
-    images,
-  });
   try {
-    question.save();
+    const data = req.body;
+    const question = new questionModel({
+      sources: JSON.parse(data.sources) || [],
+      question: data.question,
+      answers: JSON.parse(data.answers) || [],
+      correct: data.correct,
+      explanation: data.explanation,
+      isFree: data.isFree,
+      subjects: JSON.parse(data.subjects) || [],
+      images: [],
+    });
+    await question.save();
+    const questionId = question._id.toString();
+    const uploadPath = path.join(
+      __dirname,
+      `../uploads/questions/${questionId}`
+    );
+    fs.mkdirSync(uploadPath, { recursive: true });
+
+    req.fileNames.forEach((fileName) => {
+      const newFileName = fileName;
+      fs.renameSync(
+        path.join(__dirname, `../uploads/tmp/${fileName}`),
+        path.join(uploadPath, newFileName)
+      );
+    });
+
+    question.images = req.fileNames;
+    await question.save();
+
     return res.status(201).json({ msg: "Done Create Exam" });
   } catch (error) {
     console.log(error);
     return next(new ErrorHandler(error.message, 400));
   }
 });
+
 const updateQuestion = CatchAsyncError(async (req, res, next) => {
   const id = req.params.id;
   const data = req.body;
-  data.image = req.uniqueSuffix || "";
   const question = await questionModel.findById(id);
+
   try {
     question.sources = JSON.parse(data.sources) || [];
     question.question = data.question || "";
     question.answers = JSON.parse(data.answers) || [];
     question.correct = data.correct || "";
     question.explanation = data.explanation || "";
-    (question.isFree = data.isFree),
-      (question.subjects = JSON.parse(data.subjects) || []);
-    question.image = data.image;
+    question.isFree = data.isFree;
+    question.subjects = JSON.parse(data.subjects) || [];
+
+    if (req.fileNames) {
+      const questionId = question._id.toString();
+      const uploadPath = path.join(
+        __dirname,
+        `../uploads/questions/${questionId}`
+      );
+      fs.mkdirSync(uploadPath, { recursive: true });
+
+      req.fileNames.forEach((fileName) => {
+        const newFileName = fileName;
+        fs.renameSync(
+          path.join(__dirname, `../uploads/tmp/${fileName}`),
+          path.join(uploadPath, newFileName)
+        );
+      });
+
+      question.images = req.fileNames;
+    }
+
     await question.save();
     return res.status(200).json({ msg: "Done Update Exam" });
   } catch (error) {
@@ -192,6 +212,7 @@ const updateQuestion = CatchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 400));
   }
 });
+
 // sources
 const addSource = CatchAsyncError(async (req, res, next) => {
   const data = req.body.source;
@@ -319,6 +340,9 @@ const deleteSubject = CatchAsyncError(async (req, res, next) => {
   }
 });
 const submitExam = CatchAsyncError(async (req, res, next) => {
+  if (req.current.type === "free")
+    return res.status(200).json({ success: true });
+
   try {
     const { userId, solvedQuestions } = req.body;
 
@@ -348,31 +372,7 @@ const submitExam = CatchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 400));
   }
 });
-const endExam = CatchAsyncError(async (req, res, next) => {
-  try {
-    const { userId, solvedQuestions } = req.body;
 
-    if (!userId || !Array.isArray(solvedQuestions)) {
-      return res.status(400).json({ error: "Invalid input data" });
-    }
-
-    const solvedQuestionsData = solvedQuestions.map((sq) => ({
-      userId: userId,
-      questionId: sq.quizId,
-      answer: sq.userAnswer,
-      isCorrect: sq.isCorrect,
-    }));
-
-    await SolvedQuestion.insertMany(solvedQuestionsData);
-
-    res
-      .status(200)
-      .json({ success: true, message: "Exam submitted successfully" });
-  } catch (error) {
-    console.error("Error submitting exam:", error);
-    return next(new ErrorHandler(error.message, 400));
-  }
-});
 const previousQuestions = CatchAsyncError(async (req, res, next) => {
   const id = req.current.id;
   const type = req.params.type;
@@ -459,17 +459,52 @@ const lastQuestions = CatchAsyncError(async (req, res, next) => {
 });
 const deleteQuestion = CatchAsyncError(async (req, res, next) => {
   const id = req.params.id;
+  const folderPath = path.join(__dirname, "../uploads/questions", id);
+
   try {
-    const question = await questionModel.findByIdAndDelete(id);
-    return res.status(200).json({ message: "Question deleted successfully" });
+    const question = await questionModel.findById(id);
+
+    if (!question) {
+      return next(new ErrorHandler("Question not found", 404));
+    }
+    if (fs.existsSync(folderPath)) {
+      fs.readdir(folderPath, (err, files) => {
+        if (err) {
+          console.error(`Error reading folder: ${err.message}`);
+          return next(new ErrorHandler("Error reading folder", 500));
+        }
+        files.forEach((file) => {
+          const filePath = path.join(folderPath, file);
+          fs.unlink(filePath, (err) => {
+            if (err) {
+              console.error(`Error deleting file: ${err.message}`);
+            } else {
+              console.log(`File deleted: ${filePath}`);
+            }
+          });
+        });
+        fs.rmdir(folderPath, (err) => {
+          if (err) {
+            console.error(`Error deleting folder: ${err.message}`);
+            return next(new ErrorHandler("Error deleting folder", 500));
+          } else {
+            console.log(`Folder deleted: ${folderPath}`);
+          }
+        });
+      });
+    }
+    await questionModel.findByIdAndDelete(id);
+    return res
+      .status(200)
+      .json({ message: "Question and associated images deleted successfully" });
   } catch (error) {
     console.log(error);
     return next(new ErrorHandler(error.message, 400));
   }
 });
+
 module.exports = {
   getQuestionsCount,
-  // getUserQuestion,
   createExam,
   addSource,
   getSources,

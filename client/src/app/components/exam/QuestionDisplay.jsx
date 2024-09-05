@@ -313,7 +313,7 @@ const QuestionDisplay = ({
   const isLastQuestion = index === exams.length - 1;
   const buttonLabel = isLastQuestion
     ? showAns
-      ? "Finsh Test"
+      ? "Finish Test"
       : "Next"
     : showAns
     ? "Next Question"

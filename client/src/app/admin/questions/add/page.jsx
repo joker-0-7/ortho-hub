@@ -296,18 +296,22 @@ function Page() {
     formData.append("subjects", JSON.stringify(state.subjects));
 
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API}/add-question`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API}/add-question`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${userContext.accessToken}`,
         },
         body: formData,
       });
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.msg || "Failed to add question");
+      }
       router.push("/admin/questions");
       toast.success("Question added successfully");
     } catch (err) {
       console.error(err);
-      toast.error("Error adding question");
+      toast.error(`Error: ${err.message}`);
     }
 
     dispatch({ type: "SET_DISABLE", payload: false });

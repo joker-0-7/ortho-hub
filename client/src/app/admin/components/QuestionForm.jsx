@@ -3,9 +3,9 @@ import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
-const QuestionForm = ({ dispatch, question, page }) => {
+const QuestionForm = ({ dispatch, question }) => {
   const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
+    const files = Array.from(e.target.files).filter(Boolean);
     dispatch({
       type: "SET_QUESTION",
       payload: { images: [...question.images, ...files] },
@@ -24,6 +24,18 @@ const QuestionForm = ({ dispatch, question, page }) => {
       type: "SET_QUESTION",
       payload: { question: e.target.value },
     });
+  };
+
+  const renderImageSrc = (image) => {
+    console.log(question);
+
+    if (!image) return null;
+
+    if (image instanceof File) {
+      return URL.createObjectURL(image);
+    }
+
+    return `${process.env.NEXT_PUBLIC_API}/public/images/${question._id}/${image}`;
   };
 
   return (
@@ -55,14 +67,10 @@ const QuestionForm = ({ dispatch, question, page }) => {
       </div>
       <div className="image-preview grid grid-cols-3 gap-3">
         {question.images &&
-          question.images.map((image, index) => (
+          question.images.filter(Boolean).map((image, index) => (
             <div key={index} className="relative w-32 h-32">
               <Image
-                src={
-                  page === "edit"
-                    ? `${process.env.NEXT_PUBLIC_API}/public/images/${image}`
-                    : URL.createObjectURL(image)
-                }
+                src={renderImageSrc(image)}
                 layout="fill"
                 objectFit="cover"
                 alt={`Uploaded ${index}`}
