@@ -12,10 +12,13 @@ import { useContext, useEffect, useState } from "react";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
 import { UserContext } from "@/app/context/User";
 import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 const TableSources = () => {
   const [sources, setSources] = useState([]);
   const [state] = useContext(UserContext);
   const router = useRouter();
+  const { toast } = useToast();
+
   const getSources = async () => {
     try {
       const res = await fetch(

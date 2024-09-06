@@ -25,7 +25,7 @@ const Navbar = () => {
     };
   }, []);
   const logout = async () => {
-    await router.push("/login");
+    await router.push("/user/login");
     await window.localStorage.removeItem("auth");
     await setState({ accessToken: null, user: null });
   };

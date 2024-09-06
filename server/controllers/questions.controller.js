@@ -216,13 +216,15 @@ const updateQuestion = CatchAsyncError(async (req, res, next) => {
 
 // sources
 const addSource = CatchAsyncError(async (req, res, next) => {
-  const data = req.body.source;
+  const data = req.body;
+  console.log(data);
+
   if (!data || !data.name)
     return res.status(404).json({ msg: "You Should Add Subject Name" });
   try {
     const source = await SourceModal(data);
     source.save();
-    return res.status(201).json({ msg: "Done Created" });
+    return res.status(201).json({ msg: "Done Created", success: true });
   } catch (err) {
     return next(new ErrorHandler(err.message, 400));
   }
@@ -283,11 +285,10 @@ const getSubjectCount = CatchAsyncError(async (req, res, next) => {
 });
 const addSubject = CatchAsyncError(async (req, res, next) => {
   const data = req.body;
-  console.log(data);
   if (!data || !data.name)
     return res
       .status(404)
-      .json({ msg: "You Should Add Subject Name", success: false });
+      .json({ msg: "You Should Add Sources Name", success: false });
   try {
     const subject = await SubjectModal(data);
     subject.save();

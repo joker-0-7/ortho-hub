@@ -15,7 +15,10 @@ const AnswerInputs = ({
           placeholder="Correct Answer"
           className="bg-gray-100"
           value={correctAnswer}
-          onChange={(e) => setCorrectAnswer(e.target.value)}
+          onChange={(e) => {
+            handleChangeAnswer(e, 0);
+            setCorrectAnswer(e.target.value);
+          }}
         />
         {answers.map((_, i) => (
           <Input
@@ -23,8 +26,8 @@ const AnswerInputs = ({
             type="text"
             placeholder="Answer"
             className="bg-gray-100"
-            value={answers[i]}
-            onChange={(e) => handleChangeAnswer(e, i)}
+            value={answers[i + 1]}
+            onChange={(e) => handleChangeAnswer(e, i + 1)}
           />
         ))}
       </div>

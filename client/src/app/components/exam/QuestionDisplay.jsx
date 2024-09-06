@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Modal } from "antd";
-import { useContext, useEffect, useState, useMemo } from "react";
+import { useContext, useEffect, useState } from "react";
 import parse from "html-react-parser";
 import Image from "next/image";
 import {
@@ -24,47 +24,46 @@ const QuestionDisplay = ({
   handleChange,
   answersQuiz,
   flags,
+  ansFun,
   showAns,
   addFlag,
   formatTime,
   time,
   exams,
   checkedAns,
+  disable,
   submitExam,
   examsCount,
 }) => {
   const [examContext] = useContext(ExamContext);
   const [checked, setChecked] = useState("");
   const { confirm } = Modal;
-
   const showConfirm = () => {
+    const okFun = async () => {
+      await submitExam(answersQuiz);
+      setIndex(examsCount);
+    };
+
     confirm({
       title: "Do you want to Exit This Exam",
       icon: <AiFillExclamationCircle />,
       content:
-        "If you exit the exam, all of your answers will be added to your statistics. Unanswered questions will not be saved.",
+        "if you exit the exam, all of your answers will be added to your statistics. Un answered questions will not be saved",
       onOk() {
-        submitExam(answersQuiz);
-        setIndex(examsCount);
+        okFun();
       },
       onCancel() {
         console.log("Cancel");
       },
     });
   };
-
   useEffect(() => {
     console.log(answersQuiz);
   }, [answersQuiz]);
-
-  const isChecked = useMemo(
-    () => (questionId, answer) => {
-      const checkedAnsBefore = handleAns.find((e) => e.quizId === questionId);
-      return checkedAnsBefore ? checkedAnsBefore.userAnswer === answer : null;
-    },
-    [handleAns]
-  );
-
+  const isChecked = (questionId, answer) => {
+    const checkedAnsBefore = handleAns.find((e) => e.quizId === questionId);
+    return checkedAnsBefore ? checkedAnsBefore.userAnswer === answer : null;
+  };
   const isLastQuestion = index === exams.length - 1;
   const buttonLabel = isLastQuestion
     ? showAns
@@ -73,16 +72,15 @@ const QuestionDisplay = ({
     : showAns
     ? "Next Question"
     : "Next";
-
   const shouldShowExplanation =
     examContext.mode !== "exam" &&
     (showAns || handleAns.some((e) => e.quizId === exam._id));
 
   return (
     <div className="rounded-lg border bg-gray-50 lg:p-6 max-sm:p-2 dark:border-gray-800 dark:bg-gray-900">
-      <div className="flex justify-between md:flex-row max-sm:flex-col-reverse pb-2 items-center">
+      <div className="flex justify-between md:flex-row max-sm:flex-col-reverse pb-2 items-center ">
         <div className="flex items-center max-sm:w-full lg:w-auto justify-between lg:flex-row max-sm:flex-col">
-          <h3 className="text-lg font-semibold lg:mr-8 lg:mb-0 max-sm:mb-2 max-sm:mr-0">
+          <h3 className="text-lg font-semibold lg:mr-8 lg:mb-0 max-sm:mb-2 max-sm:mr-0 ">
             Question {index + 1}
           </h3>
           <span
@@ -140,78 +138,72 @@ const QuestionDisplay = ({
                     objectFit="cover"
                     alt={`Uploaded ${uri}`}
                     className="rounded"
-                    onError={(e) => {
-                      e.target.src = "/fallback.png";
-                    }}
-                    loading="lazy"
                   />
                 </div>
               ))}
           </div>
           <div className="space-y-2">
-            {exam.answers
-              .filter((ans) => ans && ans.trim() !== "")
-              .sort()
-              .map((ans, i) => (
-                <div
-                  key={i}
-                  className={`flex items-center space-x-2 mb-3 border-1 border-gray-700 px-1 py-2 rounded-sm relative ${
-                    excludesAns.includes(ans) && "bg-red-100"
-                  } ${
-                    examContext.mode !== "exam" &&
-                    (showAns || checkedAns(exam._id)) &&
-                    exam.correct === ans
-                      ? "bg-green-200"
-                      : ""
-                  } ${
-                    (isChecked(exam._id, ans) || checked === ans) &&
-                    "border-sky-400 shadow-md border-2"
-                  }`}
-                >
-                  <div className="icon absolute right-1">
-                    {excludesAns.includes(ans) ? (
-                      <span
-                        className="cursor-pointer"
-                        onClick={() => handleExcludes(ans)}
-                      >
-                        <AiFillEyeInvisible />
-                      </span>
-                    ) : (
-                      <span
-                        className="cursor-pointer"
-                        onClick={() => handleExcludes(ans)}
-                      >
-                        <AiFillEye />
-                      </span>
-                    )}
-                  </div>
-                  <label
-                    htmlFor={`${ans}_${i}`}
-                    className="flex items-center cursor-pointer w-full text-left"
-                  >
-                    <input
-                      id={`${ans}_${i}`}
-                      name={`answer_${index}`}
-                      style={{ width: "50px" }}
-                      onClick={(e) => {
-                        setChecked(ans);
-                        handleChange(e);
-                      }}
-                      hidden={true}
-                      value={ans}
-                      disabled={
-                        examContext.mode !== "exam" &&
-                        (showAns ||
-                          handleAns.filter((e) => e.quizId === exam._id)
-                            .length > 0)
-                      }
-                      type="radio"
-                    />
-                    <span className="ml-2 text-left">{ans}</span>
-                  </label>
+            {exam.answers.filter(ans => ans != "").sort().map((ans, i) => (
+              <div
+                key={i}
+                className={`flex items-center space-x-2 mb-3 border-1 border-gray-700 px-1 py-2 rounded-sm relative ${
+                  excludesAns.includes(ans) && "bg-red-100"
+                } ${
+                  examContext.mode !== "exam" &&
+                  (showAns || checkedAns(exam._id)) &&
+                  exam.correct === ans
+                    ? "bg-green-200"
+                    : ""
+                } ${
+                  (isChecked(exam._id, ans) || checked === ans) &&
+                  "border-sky-400 shadow-md border-2"
+                }`}
+              >
+                <div className="icon absolute right-1">
+                  {excludesAns.includes(ans) ? (
+                    <span
+                      className="cursor-pointer"
+                      onClick={() => handleExcludes(ans)}
+                    >
+                      <AiFillEyeInvisible />
+                    </span>
+                  ) : (
+                    <span
+                      className="cursor-pointer"
+                      onClick={() => handleExcludes(ans)}
+                    >
+                      <AiFillEye />
+                    </span>
+                  )}
                 </div>
-              ))}
-
+                <label
+                  htmlFor={`${ans}_${i}`}
+                  className="flex items-center cursor-pointer w-full text-left"
+                >
+                  <input
+                    id={`${ans}_${i}`}
+                    name={`answer_${index}`}
+                    style={{ width: "50px" }}
+                    onClick={(e) => {
+                      setChecked(ans);
+                      handleChange(e);
+                    }}
+                    hidden={true}
+                    value={ans}
+                    disabled={
+                      examContext.mode !== "exam" &&
+                      (showAns ||
+                        handleAns.filter((e) => e.quizId === exam._id).length >
+                          0)
+                    }
+                    type="radio"
+                  />
+                  <span className={`ml-2 text-left`}>
+                    {ans != "" ? ans : false}
+                  </span>
+                </label>
+              </div>
+            ))}
             {shouldShowExplanation && (
               <div className="explanation">
                 <hr />
@@ -223,7 +215,7 @@ const QuestionDisplay = ({
                 <a
                   href={process.env.NEXT_PUBLIC_TELEGRAM}
                   target="_blank"
-                  className="text-main"
+                  className="text-main "
                 >
                   contact us
                 </a>
@@ -250,16 +242,14 @@ const QuestionDisplay = ({
                 Skip
               </span>
             )}
-
-            <Button
-              variant="default"
-              className="w-fit"
-              onClick={() =>
-                isLastQuestion ? submitExam(answersQuiz) : setIndex(index + 1)
-              }
-            >
-              {buttonLabel}
-            </Button>
+            {
+              <Button
+                onClick={(e) => ansFun(e, exam._id, index)}
+                disabled={disable}
+              >
+                {buttonLabel}
+              </Button>
+            }
           </div>
         </div>
       </div>

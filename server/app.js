@@ -9,9 +9,10 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var questionsRouter = require("./routes/question");
 const { connectDB } = require("./utils/db");
+const compression = require("compression");
 const ErrorMiddleware = require("./middlewares/error");
-const { verifyToken } = require("./middlewares/auth");
 var app = express();
+app.use(compression());
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

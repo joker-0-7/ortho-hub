@@ -350,9 +350,9 @@ function Page() {
           answers={state.answers}
           handleChangeAnswer={handleChangeAnswer}
           correctAnswer={state.correct}
-          setCorrectAnswer={(value) =>
-            dispatch({ type: "SET_QUESTION", payload: { correct: value } })
-          }
+          setCorrectAnswer={(value) => {
+            dispatch({ type: "SET_QUESTION", payload: { correct: value } });
+          }}
         />
         <div className="adv w-1/2 grid grid-cols-1 gap-3">
           <AlertDialog>
