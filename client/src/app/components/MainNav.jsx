@@ -47,7 +47,7 @@ const MainNav = () => {
             </li>
           ))}
         </ul>
-        <div className="flex items-center justify-between">
+        <div className="hidden md:flex items-center justify-between">
           <Button className="bg-main text-light px-5 py-2 mx-2 rounded-lg border-2 border-main">
             <Link href="/user/login">Login</Link>
           </Button>
@@ -62,18 +62,31 @@ const MainNav = () => {
           {nav ? <FaTimes size={30} /> : <FaBars size={30} />}
         </div>
         {nav && (
-          <ul className="flex flex-col justify-center items-center absolute top-0 left-0 w-full h-screen bg-gradient-to-b from-black to-gray-800 text-gray-500">
-            {links.map(({ id, link, name }) => (
-              <li
-                key={id}
-                className="px-4 cursor-pointer capitalize py-6 text-2xl"
+          <>
+            <ul className="flex flex-col justify-center items-center absolute top-0 left-0 w-full h-screen bg-gradient-to-b from-black to-gray-800 text-gray-500">
+              {links.map(({ id, link, name }) => (
+                <li
+                  key={id}
+                  className="px-4 cursor-pointer capitalize py-6 text-2xl"
+                >
+                  <Link onClick={() => setNav(!nav)} href={`${link}`}>
+                    {name}
+                  </Link>
+                </li>
+              ))}
+              <div
+                className="flex items-center justify-between w-full px-9"
+                style={{ zIndex: 99 }}
               >
-                <Link onClick={() => setNav(!nav)} href={`${link}`}>
-                  {name}
-                </Link>
-              </li>
-            ))}
-          </ul>
+                <Button className="bg-main text-light px-5 py-2 mx-2 rounded-lg border-2 border-main">
+                  <Link href="/user/login">Login</Link>
+                </Button>
+                <Button className="bg-transparent text-main px-5 py-2 rounded-lg border-main border-2 hover:bg-main hover:text-light duration-200">
+                  <Link href="/user/register">Register</Link>
+                </Button>
+              </div>
+            </ul>
+          </>
         )}
       </div>
     </div>

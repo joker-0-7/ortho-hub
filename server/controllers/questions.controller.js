@@ -152,17 +152,18 @@ const addQuestion = CatchAsyncError(async (req, res, next) => {
       __dirname,
       `../uploads/questions/${questionId}`
     );
-    fs.mkdirSync(uploadPath, { recursive: true });
+    if (req.fileNames?.length >= 1) {
+      fs.mkdirSync(uploadPath, { recursive: true });
 
-    req.fileNames.forEach((fileName) => {
-      const newFileName = fileName;
-      fs.renameSync(
-        path.join(__dirname, `../uploads/tmp/${fileName}`),
-        path.join(uploadPath, newFileName)
-      );
-    });
-
-    question.images = req.fileNames;
+      req.fileNames.forEach((fileName) => {
+        const newFileName = fileName;
+        fs.renameSync(
+          path.join(__dirname, `../uploads/tmp/${fileName}`),
+          path.join(uploadPath, newFileName)
+        );
+      });
+      question.images = req.fileNames;
+    }
     await question.save();
 
     return res.status(201).json({ msg: "Done Create Exam" });

@@ -13,7 +13,7 @@ import { getQuestionsCount, getSolvedQuestions } from "../functions/user";
 function Page() {
   const questionsUser = ["Correct Questions", "Incorrect Questions"];
   const questionsSite = ["Used Questions", "Remaining Questions"];
-  const [state, setState] = useContext(UserContext);
+  const [state] = useContext(UserContext);
   const [result, setResult] = useState({
     questionsTaken: 0,
     questionsRemaining: 0,

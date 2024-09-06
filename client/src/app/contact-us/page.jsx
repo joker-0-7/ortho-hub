@@ -48,7 +48,7 @@ function Page() {
       <nav>
         <MainNav />
       </nav>
-      <div className="contact-us">
+      <div className="contact-us pt-20">
         <div className="container mx-auto flex justify-center items-center min-h-screen">
           <section className="bg-light dark:bg-gray-900 shadow-md rounded-sm">
             <div className="py-8 lg:py-16 px-4 mx-auto max-w-screen-md">

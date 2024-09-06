@@ -42,10 +42,10 @@ export default function Page() {
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                Try Our Product for Free
+                Try Our Queistion Bank for Free
               </h1>
               <h2 className="text-2xl font-medium tracking-tighter sm:text-3xl xl:text-4xl/none">
-                Try Our Product for Free
+                You can start your free trial now with one click
               </h2>
               <p className="max-w-[600px] text-muted-foreground md:text-xl">
                 This is the trial version of our system, and not all features
