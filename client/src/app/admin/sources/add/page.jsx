@@ -54,7 +54,7 @@ export default function InputForm() {
         toast.error(result.msg);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error(error?.response?.data?.msg || "Error add source");
     }
   }

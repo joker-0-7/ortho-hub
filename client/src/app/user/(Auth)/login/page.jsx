@@ -55,47 +55,19 @@ function Page() {
       window.localStorage.setItem("auth", JSON.stringify(data));
 
       if (!data.user.isVerified) {
-        console.log("payment");
         router.push(`/user/payment/${data.user._id}`);
       } else {
-        console.log("no payment");
         router.push(`/user`);
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
 
       toast.error(err.message);
       console.error("Fetch error:", err);
     }
     setDisable(false);
   };
-  const freeTrial = async () => {
-    console.log("free");
 
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API}/users/free-trial`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const res = await response.json();
-      setState({
-        user: res.user,
-        accessToken: res.accessToken,
-      });
-      window.localStorage.setItem("auth", JSON.stringify(res));
-      router.push(`/user`);
-    } catch (error) {
-      console.error("Fetch error:", error);
-    }
-  };
   return (
     <div className="login">
       <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
@@ -105,7 +77,7 @@ function Page() {
           user={user}
           msg={msg}
           handleChange={handleChange}
-          freeTrial={freeTrial}
+          freeTrial={() => router.push("/user/free-trial")}
           handleSubmit={handleSubmit}
           disable={disable}
         />

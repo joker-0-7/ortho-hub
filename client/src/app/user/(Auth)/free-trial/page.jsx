@@ -9,8 +9,6 @@ export default function Page() {
   const [state, setState] = useContext(UserContext);
   const router = useRouter();
   const freeTrial = async () => {
-    console.log("free");
-
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API}/users/free-trial`,

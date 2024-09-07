@@ -27,7 +27,7 @@ function ModalSubject({ state, question, setQuestion }) {
       const data = await res.json();
       setSubjects(data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   useEffect(() => {
@@ -44,7 +44,6 @@ function ModalSubject({ state, question, setQuestion }) {
     } else {
       setQuestion({ ...question, subjects: [...question.subjects, option] });
     }
-    console.log(question.subjects);
   };
   return (
     <AlertDialogContent>

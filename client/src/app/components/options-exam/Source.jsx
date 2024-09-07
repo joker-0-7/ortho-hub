@@ -22,7 +22,7 @@ export function DialogSources({ handleChange, examContext, setExamContext }) {
       const data = await res.json();
       setSources(data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   useEffect(() => {

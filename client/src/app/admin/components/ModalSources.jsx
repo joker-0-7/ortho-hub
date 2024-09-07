@@ -27,7 +27,7 @@ function ModalConfirm({ state, question, setQuestion }) {
       const data = await res.json();
       setSources(data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   useEffect(() => {
@@ -44,7 +44,6 @@ function ModalConfirm({ state, question, setQuestion }) {
     } else {
       setQuestion({ ...question, sources: [...question.sources, option] });
     }
-    console.log(question.sources);
   };
   return (
     <AlertDialogContent>

@@ -67,7 +67,6 @@ function Page() {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         if (res.success) {
           router.push(
             `/user/login?msg=${encodeURIComponent(
@@ -78,7 +77,7 @@ function Page() {
           toast.error(res.message);
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
   return (
     <div className="register">

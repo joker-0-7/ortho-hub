@@ -27,14 +27,10 @@ const QuestionForm = ({ dispatch, question }) => {
   };
 
   const renderImageSrc = (image) => {
-    console.log(question);
-
     if (!image) return null;
-
     if (image instanceof File) {
       return URL.createObjectURL(image);
     }
-
     return `${process.env.NEXT_PUBLIC_API}/public/images/${question._id}/${image}`;
   };
 

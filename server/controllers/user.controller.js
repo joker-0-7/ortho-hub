@@ -11,7 +11,7 @@ const getUsers = CatchAsyncError(async (req, res, next) => {
   const perPage = req.params.per || 10;
   try {
     const users = await userModel
-      .find()
+      .find({}, { _id, firstName, lastName, email, isVerified, createdAt })
       .sort({ createdAt: -1 })
       .skip((current - 1) * perPage)
       .limit(perPage)
@@ -132,29 +132,6 @@ const getUser = CatchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler(err.message, 400));
   }
 });
-// const updateUser = CatchAsyncError(async (req, res, next) => {
-//   const id = req.params.id;
-//   const data = { ...req.body };
-
-//   try {
-//     if (data.password) {
-//       const salt = await bcrypt.genSalt(10);
-//       data.password = await bcrypt.hash(data.password, salt);
-//     }
-//     if (data.activationTo) {
-//       data.createdAt = new Date();
-//       data.subscriptionEnd.setMonth(
-//         data.createdAt.getMonth() + data.activationTo
-//       );
-//     }
-//     const user = await userModel.findByIdAndUpdate(id, data, { new: true });
-
-//     return res.status(200).json({ success: true, user });
-//   } catch (error) {
-//     console.log(error);
-//     return next(new ErrorHandler(error.message, 400));
-//   }
-// });
 const updateUser = CatchAsyncError(async (req, res, next) => {
   const id = req.params.id;
   const data = { ...req.body };
@@ -180,7 +157,6 @@ const updateUser = CatchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 400));
   }
 });
-
 const deleteUser = CatchAsyncError(async (req, res, next) => {
   const id = req.params.id;
   try {

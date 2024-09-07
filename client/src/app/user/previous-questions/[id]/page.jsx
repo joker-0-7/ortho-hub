@@ -51,32 +51,35 @@ function Page({ params }) {
                   {exam?.questionId?.question}
                 </p>
                 <div className="space-y-2">
-                  {exam.questionId?.answers.sort().map((ans, i) => (
-                    <div
-                      key={i}
-                      className={`flex items-center space-x-2 mb-3 border-1 border-gray-700 px-1 py-2 rounded-sm relative ${
-                        ans === exam?.questionId.correct
-                          ? "bg-green-200"
-                          : "bg-red-200"
-                      } ${ans === exam.answer && "border-4 border-main"}`}
-                    >
-                      <label
-                        htmlFor={`${ans}_${i}`}
-                        className="flex items-center w-full text-left"
+                  {exam.questionId?.answers
+                    .sort()
+                    .filter((ans) => ans != "")
+                    .map((ans, i) => (
+                      <div
+                        key={i}
+                        className={`flex items-center space-x-2 mb-3 border-1 border-gray-700 px-1 py-2 rounded-sm relative ${
+                          ans === exam?.questionId.correct
+                            ? "bg-green-200"
+                            : "bg-red-200"
+                        } ${ans === exam.answer && "border-4 border-main"}`}
                       >
-                        <input
-                          id={`${ans}_${i}`}
-                          style={{ width: "50px" }}
-                          hidden={true}
-                          value={ans}
-                          type="radio"
-                        />
-                        <span className={`ml-2 text-left`}>
-                          {ans != "" ? ans : false}
-                        </span>
-                      </label>
-                    </div>
-                  ))}
+                        <label
+                          htmlFor={`${ans}_${i}`}
+                          className="flex items-center w-full text-left"
+                        >
+                          <input
+                            id={`${ans}_${i}`}
+                            style={{ width: "50px" }}
+                            hidden={true}
+                            value={ans}
+                            type="radio"
+                          />
+                          <span className={`ml-2 text-left`}>
+                            {ans != "" ? ans : false}
+                          </span>
+                        </label>
+                      </div>
+                    ))}
                   {exam?.questionId?.explanation && (
                     <div className="explanation">
                       <hr />

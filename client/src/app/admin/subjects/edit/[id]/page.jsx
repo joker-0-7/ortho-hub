@@ -54,7 +54,7 @@ export default function InputForm({ params }) {
         toast.error(result.msg);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error(error?.response?.data?.msg || "Error add subject");
     }
   }
@@ -73,7 +73,7 @@ export default function InputForm({ params }) {
       const result = await res.json();
       form.reset({ name: result.name });
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   useEffect(() => {

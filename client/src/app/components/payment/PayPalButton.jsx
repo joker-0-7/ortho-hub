@@ -3,10 +3,6 @@ import React, { useEffect } from "react";
 function App(id) {
   const userID = id.userID;
 
-  useEffect(() => {
-    console.log(userID);
-  }, []);
-
   const createOrder = async () => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API}/users/create-order`,
@@ -31,9 +27,6 @@ function App(id) {
     );
 
     const details = await res.json();
-    console.log(details);
-
-    // alert("Transaction completed by " + details.payer.name.given_name);
   };
 
   useEffect(() => {

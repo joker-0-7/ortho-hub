@@ -18,8 +18,6 @@ export const getSolvedQuestions = async (token) => {
     },
   });
   const data = await res.json();
-  console.log(data.solved);
-
   return data.solved;
 };
 

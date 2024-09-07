@@ -7,6 +7,7 @@ import QuestionDisplay from "@/app/components/exam/QuestionDisplay";
 import { ExamContext } from "../context";
 import { UserContext } from "@/app/context/User";
 import Score from "@/app/components/Score";
+import { toast } from "react-toastify";
 function Page() {
   const [exams, setExams] = useState([]);
   const [state] = useContext(UserContext);
@@ -160,7 +161,7 @@ function Page() {
     );
     if (res.ok) {
       const result = await res.json();
-      console.log("Exam submitted successfully:", result);
+      toast.success("Exam submitted successfully");
     } else {
       console.error("Failed to submit exam:", await res.text());
     }

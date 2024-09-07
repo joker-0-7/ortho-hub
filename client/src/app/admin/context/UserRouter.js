@@ -3,14 +3,11 @@ import React, { useContext } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Loader from "../components/loader/Loader";
 import { AdminContext } from "./AdminContext";
-import { UserContext } from "./User";
 
 function UserRouter({ children }) {
   const { isAdmin, loading } = useContext(AdminContext);
   const pathName = usePathname();
   const router = useRouter();
-  const [state, setState] = useContext(UserContext);
-
   if (loading) {
     return <Loader />;
   }

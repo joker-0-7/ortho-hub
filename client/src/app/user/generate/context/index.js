@@ -40,7 +40,6 @@ const ExamProvider = ({ children }) => {
 
   useEffect(() => {
     sessionStorage.setItem("exam", JSON.stringify(exam));
-    console.log(exam);
   }, [exam]);
 
   return (

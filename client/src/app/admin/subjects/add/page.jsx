@@ -47,7 +47,6 @@ export default function InputForm() {
       );
 
       const result = await res.json();
-      console.log(result);
       if (result.success) {
         toast.success(result.msg);
         form.reset();
@@ -55,7 +54,7 @@ export default function InputForm() {
         toast.error(result.msg);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error(error?.response?.data?.msg || "Error add subject");
     }
   }

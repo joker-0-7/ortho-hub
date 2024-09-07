@@ -48,7 +48,7 @@ function Page() {
       const data = await res.json();
       setMessages(data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   }, []);
   useEffect(() => {
@@ -76,7 +76,7 @@ function Page() {
       }
       getMessages();
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   return (

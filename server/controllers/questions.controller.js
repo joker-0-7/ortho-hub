@@ -36,10 +36,19 @@ const createExam = CatchAsyncError(async (req, res, next) => {
       sources: { $in: data.sources },
       subjects: { $in: data.subjects },
     };
+
     if (req?.current?.type === "free") {
       const exam = await questionModel.aggregate([
         { $match: { isFree: true } },
         { $sample: { size: data.count || 100 } },
+        {
+          $project: {
+            createdAt: 0,
+            __v: 0,
+            updatedAt: 0,
+            isFree: 0,
+          },
+        },
       ]);
       return res.status(200).json(exam);
     } else {
@@ -51,12 +60,14 @@ const createExam = CatchAsyncError(async (req, res, next) => {
           .populate({
             path: "questionId",
             match: query,
+            select: "-createdAt -__v -updatedAt -isFree",
           })
           .exec();
         correctQuestions = correctSolvedQuestions
           .filter((sq) => sq.questionId !== null)
           .map((sq) => sq.questionId);
       }
+
       if (data.options.useAndInCorrect) {
         const incorrectSolvedQuestions = await SolvedQuestion.find({
           userId: id,
@@ -65,6 +76,7 @@ const createExam = CatchAsyncError(async (req, res, next) => {
           .populate({
             path: "questionId",
             match: query,
+            select: "-createdAt -__v -updatedAt -isFree",
           })
           .exec();
 
@@ -72,22 +84,35 @@ const createExam = CatchAsyncError(async (req, res, next) => {
           .filter((sq) => sq.questionId !== null)
           .map((sq) => sq.questionId);
       }
+
       if (data.options.unUsed) {
-        unusedQuestions = await questionModel.find({
-          ...query,
-          _id: { $nin: solvedQuestionIds },
-        });
+        unusedQuestions = await questionModel
+          .find({
+            ...query,
+            _id: { $nin: solvedQuestionIds },
+          })
+          .select("-createdAt -__v -updatedAt -isFree");
       }
     }
+
     let allQuestions = [
       ...correctQuestions,
       ...incorrectQuestions,
       ...unusedQuestions,
     ];
+
     if (allQuestions.length === 0) {
       allQuestions = await questionModel.aggregate([
         { $match: query },
         { $sample: { size: data.count || 100 } },
+        {
+          $project: {
+            createdAt: 0,
+            __v: 0,
+            updatedAt: 0,
+            isFree: 0,
+          },
+        },
       ]);
     } else {
       allQuestions = allQuestions
@@ -124,6 +149,9 @@ const getQuestions = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip((current - 1) * perPage)
       .limit(perPage)
+      .select(
+        "-createdAt -__v -updatedAt -isFree -answers -correct -images -explanation"
+      )
       .lean();
     return res.status(200).json(quizzes);
   } catch (error) {
@@ -378,56 +406,32 @@ const submitExam = CatchAsyncError(async (req, res, next) => {
 const previousQuestions = CatchAsyncError(async (req, res, next) => {
   const id = req.current.id;
   const type = req.params.type;
-  const current = req.params.current || 1;
-  const perPage = req.params.per || 10;
+  const current = parseInt(req.params.current, 10) || 1;
+  const perPage = parseInt(req.params.per, 10) || 10;
   try {
+    let query = { userId: id };
     if (type === "correct") {
-      const previousQuestions = await SolvedQuestion.find({
-        userId: id,
-        isCorrect: true,
-      })
-        .sort({ createdAt: -1 })
-        .populate("questionId")
-        .skip((current - 1) * perPage)
-        .limit(perPage)
-        .lean()
-        .exec();
-      return res.status(200).json(previousQuestions);
+      query.isCorrect = true;
     } else if (type === "incorrect") {
-      const previousQuestions = await SolvedQuestion.find({
-        userId: id,
-        isCorrect: false,
-      })
-        .sort({ createdAt: -1 })
-        .skip((current - 1) * perPage)
-        .limit(perPage)
-        .lean()
-        .populate("questionId")
-        .exec();
-      return res.status(200).json(previousQuestions);
-    } else {
-      const previousQuestions = await SolvedQuestion.find({
-        userId: id,
-      })
-        .sort({ createdAt: -1 })
-        .skip((current - 1) * perPage)
-        .limit(perPage)
-        .lean()
-        .populate("questionId");
-      if (previousQuestions.length > 0)
-        return res.status(200).json(previousQuestions);
-      return next(new ErrorHandler("Error", 400));
+      query.isCorrect = false;
     }
+    const previousQuestions = await SolvedQuestion.find(query)
+      .sort({ createdAt: -1 })
+      .skip((current - 1) * perPage)
+      .limit(perPage)
+      .lean()
+      .populate("questionId");
+    if (previousQuestions.length > 0) {
+      return res.status(200).json(previousQuestions);
+    }
+    return next(new ErrorHandler("No questions found", 404));
   } catch (error) {
     console.log(error);
-
-    return next(new ErrorHandler(error.message, 400));
+    return next(new ErrorHandler(error.message, 500));
   }
 });
 const previousQuestion = CatchAsyncError(async (req, res, next) => {
   const id = req.params.id;
-  console.log(id);
-
   try {
     const prev = await SolvedQuestion.findOne({ questionId: id }).populate(
       "questionId"
@@ -441,7 +445,10 @@ const previousQuestion = CatchAsyncError(async (req, res, next) => {
 });
 const lastUsers = CatchAsyncError(async (req, res, next) => {
   try {
-    const last = await userModel.find().sort({ createdAt: -1 }).limit(5);
+    const last = await userModel
+      .find({}, { _id, firstName, lastName, isVerified })
+      .sort({ createdAt: -1 })
+      .limit(5);
     if (last) return res.status(200).json(last);
     return next(new ErrorHandler("Error", 400));
   } catch (error) {
@@ -451,7 +458,10 @@ const lastUsers = CatchAsyncError(async (req, res, next) => {
 });
 const lastQuestions = CatchAsyncError(async (req, res, next) => {
   try {
-    const last = await questionModel.find().sort({ createdAt: -1 }).limit(5);
+    const last = await questionModel
+      .find({}, { _id, question })
+      .sort({ createdAt: -1 })
+      .limit(5);
     if (last) return res.status(200).json(last);
     return next(new ErrorHandler("Error", 400));
   } catch (error) {
@@ -459,6 +469,7 @@ const lastQuestions = CatchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 400));
   }
 });
+// Don't Have Send data from DATABASE
 const deleteQuestion = CatchAsyncError(async (req, res, next) => {
   const id = req.params.id;
   const folderPath = path.join(__dirname, "../uploads/questions", id);

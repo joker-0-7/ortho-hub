@@ -57,9 +57,6 @@ const QuestionDisplay = ({
       },
     });
   };
-  useEffect(() => {
-    console.log(answersQuiz);
-  }, [answersQuiz]);
   const isChecked = (questionId, answer) => {
     const checkedAnsBefore = handleAns.find((e) => e.quizId === questionId);
     return checkedAnsBefore ? checkedAnsBefore.userAnswer === answer : null;
@@ -143,67 +140,70 @@ const QuestionDisplay = ({
               ))}
           </div>
           <div className="space-y-2">
-            {exam.answers.filter(ans => ans != "").sort().map((ans, i) => (
-              <div
-                key={i}
-                className={`flex items-center space-x-2 mb-3 border-1 border-gray-700 px-1 py-2 rounded-sm relative ${
-                  excludesAns.includes(ans) && "bg-red-100"
-                } ${
-                  examContext.mode !== "exam" &&
-                  (showAns || checkedAns(exam._id)) &&
-                  exam.correct === ans
-                    ? "bg-green-200"
-                    : ""
-                } ${
-                  (isChecked(exam._id, ans) || checked === ans) &&
-                  "border-sky-400 shadow-md border-2"
-                }`}
-              >
-                <div className="icon absolute right-1">
-                  {excludesAns.includes(ans) ? (
-                    <span
-                      className="cursor-pointer"
-                      onClick={() => handleExcludes(ans)}
-                    >
-                      <AiFillEyeInvisible />
-                    </span>
-                  ) : (
-                    <span
-                      className="cursor-pointer"
-                      onClick={() => handleExcludes(ans)}
-                    >
-                      <AiFillEye />
-                    </span>
-                  )}
-                </div>
-                <label
-                  htmlFor={`${ans}_${i}`}
-                  className="flex items-center cursor-pointer w-full text-left"
+            {exam.answers
+              .filter((ans) => ans != "")
+              .sort()
+              .map((ans, i) => (
+                <div
+                  key={i}
+                  className={`flex items-center space-x-2 mb-3 border-1 border-gray-700 px-1 py-2 rounded-sm relative ${
+                    excludesAns.includes(ans) && "bg-red-100"
+                  } ${
+                    examContext.mode !== "exam" &&
+                    (showAns || checkedAns(exam._id)) &&
+                    exam.correct === ans
+                      ? "bg-green-200"
+                      : ""
+                  } ${
+                    (isChecked(exam._id, ans) || checked === ans) &&
+                    "border-sky-400 shadow-md border-2"
+                  }`}
                 >
-                  <input
-                    id={`${ans}_${i}`}
-                    name={`answer_${index}`}
-                    style={{ width: "50px" }}
-                    onClick={(e) => {
-                      setChecked(ans);
-                      handleChange(e);
-                    }}
-                    hidden={true}
-                    value={ans}
-                    disabled={
-                      examContext.mode !== "exam" &&
-                      (showAns ||
-                        handleAns.filter((e) => e.quizId === exam._id).length >
-                          0)
-                    }
-                    type="radio"
-                  />
-                  <span className={`ml-2 text-left`}>
-                    {ans != "" ? ans : false}
-                  </span>
-                </label>
-              </div>
-            ))}
+                  <div className="icon absolute right-1">
+                    {excludesAns.includes(ans) ? (
+                      <span
+                        className="cursor-pointer"
+                        onClick={() => handleExcludes(ans)}
+                      >
+                        <AiFillEyeInvisible />
+                      </span>
+                    ) : (
+                      <span
+                        className="cursor-pointer"
+                        onClick={() => handleExcludes(ans)}
+                      >
+                        <AiFillEye />
+                      </span>
+                    )}
+                  </div>
+                  <label
+                    htmlFor={`${ans}_${i}`}
+                    className="flex items-center cursor-pointer w-full text-left"
+                  >
+                    <input
+                      id={`${ans}_${i}`}
+                      name={`answer_${index}`}
+                      style={{ width: "50px" }}
+                      onClick={(e) => {
+                        setChecked(ans);
+                        handleChange(e);
+                      }}
+                      hidden={true}
+                      value={ans}
+                      disabled={
+                        examContext.mode !== "exam" &&
+                        (showAns ||
+                          handleAns.filter((e) => e.quizId === exam._id)
+                            .length > 0)
+                      }
+                      type="radio"
+                    />
+                    <span className={`ml-2 text-left`}>
+                      {ans != "" ? ans : false}
+                    </span>
+                  </label>
+                </div>
+              ))}
             {shouldShowExplanation && (
               <div className="explanation">
                 <hr />

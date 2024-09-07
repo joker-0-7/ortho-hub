@@ -34,7 +34,7 @@ const TableSources = () => {
       const data = await res.json();
       setSources(data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
   const handleDelete = async (id) => {
