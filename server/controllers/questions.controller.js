@@ -446,7 +446,7 @@ const previousQuestion = CatchAsyncError(async (req, res, next) => {
 const lastUsers = CatchAsyncError(async (req, res, next) => {
   try {
     const last = await userModel
-      .find({}, { _id, firstName, lastName, isVerified })
+      .find({}, { _id: 1, firstName: 1, lastName: 1, isVerified: 1, email: 1 })
       .sort({ createdAt: -1 })
       .limit(5);
     if (last) return res.status(200).json(last);
@@ -459,7 +459,7 @@ const lastUsers = CatchAsyncError(async (req, res, next) => {
 const lastQuestions = CatchAsyncError(async (req, res, next) => {
   try {
     const last = await questionModel
-      .find({}, { _id, question })
+      .find({}, { _id: 1, question: 1 })
       .sort({ createdAt: -1 })
       .limit(5);
     if (last) return res.status(200).json(last);

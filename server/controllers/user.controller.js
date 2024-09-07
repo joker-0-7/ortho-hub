@@ -11,7 +11,17 @@ const getUsers = CatchAsyncError(async (req, res, next) => {
   const perPage = req.params.per || 10;
   try {
     const users = await userModel
-      .find({}, { _id, firstName, lastName, email, isVerified, createdAt })
+      .find(
+        {},
+        {
+          _id: 1,
+          firstName: 1,
+          lastName: 1,
+          email: 1,
+          isVerified: 1,
+          createdAt: 1,
+        }
+      )
       .sort({ createdAt: -1 })
       .skip((current - 1) * perPage)
       .limit(perPage)
