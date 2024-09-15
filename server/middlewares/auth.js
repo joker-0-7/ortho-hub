@@ -35,13 +35,13 @@ const verifyToken = async (req, res, next) => {
 /**
  * Checks whether the request is made by an admin or not. If it isn't, it throws an unauthorized error.
  */
-async function isAdmin(req, res, next) {
-  const user = await userModel.findById(req.current.userId);
+const isAdmin = async function (req, res, next) {
+  const user = await userModel.findById(req.current.id);
   if (user && user.role === "admin") return next();
   else {
     return res.status(401).json({ msg: "Unauthorized - Admin only resource" });
   }
-}
+};
 
 /**
  * This middleware checks if the requested id in the params matches with the logged user id.

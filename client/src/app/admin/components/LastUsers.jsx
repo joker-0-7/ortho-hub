@@ -19,28 +19,30 @@ function LastUsers() {
   }, []);
   return (
     <>
-      {users.map((user) => {
-        return (
-          <div className="flex items-center gap-4" key={user._id}>
-            <Avatar className="hidden h-9 w-9 sm:flex">
-              <AvatarFallback>
-                {`${user?.firstName?.[0].toUpperCase() || ""}${
-                  user?.lastName?.[0].toUpperCase() || ""
-                }`}
-              </AvatarFallback>
-            </Avatar>
-            <div className="grid gap-1">
-              <p className="text-sm font-medium leading-none">
-                {`${user.firstName} ${user.lastName}`}
-              </p>
-              <p className="text-sm text-muted-foreground">{user.email}</p>
+      {users &&
+        users.length > 0 &&
+        users?.map((user) => {
+          return (
+            <div className="flex items-center gap-4" key={user._id}>
+              <Avatar className="hidden h-9 w-9 sm:flex">
+                <AvatarFallback>
+                  {`${user?.firstName?.[0].toUpperCase() || ""}${
+                    user?.lastName?.[0].toUpperCase() || ""
+                  }`}
+                </AvatarFallback>
+              </Avatar>
+              <div className="grid gap-1">
+                <p className="text-sm font-medium leading-none">
+                  {`${user.firstName} ${user.lastName}`}
+                </p>
+                <p className="text-sm text-muted-foreground">{user.email}</p>
+              </div>
+              <div className="ml-auto font-medium">
+                {user.isVerified ? "Active" : "Not Active"}
+              </div>
             </div>
-            <div className="ml-auto font-medium">
-              {user.isVerified ? "Active" : "Not Active"}
-            </div>
-          </div>
-        );
-      })}
+          );
+        })}
     </>
   );
 }

@@ -35,10 +35,12 @@ app.use(
 app.use(function (req, res, next) {
   next(createError(404));
 });
-app.listen(process.env.PORT, () => {
-  console.log(`Server Is Connected With Port ${process.env.PORT}`);
-  connectDB();
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(process.env.PORT, () => {
+    console.log(`Server is running on port ${process.env.PORT}`);
+    connectDB();
+  });
+}
 app.use(ErrorMiddleware);
 
 module.exports = app;

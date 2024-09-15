@@ -35,18 +35,20 @@ function LastQuestions() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {questions?.map((question) => {
-          return (
-            <TableRow key={question._id}>
-              <TableCell>
-                <div className="font-medium text-sm">{question.question}</div>
-              </TableCell>
-              <TableCell className="hidden xl:table-column">
-                {question?.subjects?.filter((s) => s !== "")}
-              </TableCell>
-            </TableRow>
-          );
-        })}
+        {questions &&
+          questions.length > 0 &&
+          questions?.map((question) => {
+            return (
+              <TableRow key={question._id}>
+                <TableCell>
+                  <div className="font-medium text-sm">{question.question}</div>
+                </TableCell>
+                <TableCell className="hidden xl:table-column">
+                  {question?.subjects?.filter((s) => s !== "")}
+                </TableCell>
+              </TableRow>
+            );
+          })}
       </TableBody>
     </Table>
   );

@@ -8,6 +8,9 @@ import { useContext } from "react";
 export default function Page() {
   const [state, setState] = useContext(UserContext);
   const router = useRouter();
+  useEffect(() => {
+    if (state?.user && state?.accessToken) router.push("/user");
+  }, []);
   const freeTrial = async () => {
     try {
       const response = await fetch(
@@ -40,7 +43,7 @@ export default function Page() {
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                Try Our Queistion Bank for Free
+                Try Our Question Bank for Free
               </h1>
               <h2 className="text-2xl font-medium tracking-tighter sm:text-3xl xl:text-4xl/none">
                 You can start your free trial now with one click

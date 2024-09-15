@@ -1,9 +1,9 @@
 var express = require("express");
 const questionController = require("../controllers/questions.controller");
-const fs = require("fs");
 var router = express.Router();
 const path = require("path");
 const multer = require("multer");
+const { isAdmin, verifyToken } = require("../middlewares/auth");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -23,20 +23,39 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 /* إعدادات الراوتر */
-router.get("/", questionController.getQuestionsCount);
+router.get("/", verifyToken, isAdmin, questionController.getQuestionsCount);
 router.post(
   "/add-question",
+  verifyToken,
+  isAdmin,
   upload.array("images"),
   questionController.addQuestion
 );
-router.delete("/question/:id", questionController.deleteQuestion);
+router.delete(
+  "/question/:id",
+  verifyToken,
+  isAdmin,
+  questionController.deleteQuestion
+);
 router.get("/get-question/:id", questionController.getQuestion);
 router.patch(
   "/update-question/:id",
+  verifyToken,
+  isAdmin,
   upload.array("images"),
   questionController.updateQuestion
 );
-router.get("/get-questions/:current/:per", questionController.getQuestions);
-router.get("/last-questions", questionController.lastQuestions);
+router.get(
+  "/get-questions/:current/:per",
+  verifyToken,
+  isAdmin,
+  questionController.getQuestions
+);
+router.get(
+  "/last-questions",
+  verifyToken,
+  isAdmin,
+  questionController.lastQuestions
+);
 
 module.exports = router;

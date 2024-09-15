@@ -1,13 +1,16 @@
 "use client";
+import { UserContext } from "@/app/context/User";
 import { deleteUser } from "@/app/functions/admin";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 function Page({ params }) {
   const router = useRouter();
+  const [state] = useContext(UserContext)
   const [user, setUser] = useState({
     firstName: "",
     lastName: "",
@@ -26,6 +29,7 @@ function Page({ params }) {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${state.accessToken}`,
         },
       }
     );
@@ -40,6 +44,7 @@ function Page({ params }) {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${state.accessToken}`,
           },
           body: JSON.stringify(user),
         }

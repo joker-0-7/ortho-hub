@@ -7,8 +7,8 @@ const questionModel = require("../models/question.model");
 const ContactUs = require("../models/contactUs");
 
 const getUsers = CatchAsyncError(async (req, res, next) => {
-  const current = req.params.current || 1;
-  const perPage = req.params.per || 10;
+  const current = req?.params?.current || 1;
+  const perPage = req?.params?.per || 10;
   try {
     const users = await userModel
       .find(

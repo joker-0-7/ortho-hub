@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import React, { useContext, useEffect, useState } from "react";
 import { DialogSources } from "@/app/components/options-exam/Source";
 import { DialogSubject } from "@/app/components/options-exam/Subject";
-import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { ExamContext } from "../context";
@@ -16,7 +15,7 @@ function Page() {
   const [examContext, setExamContext] = useContext(ExamContext);
   const [disable, setDisable] = useState(false);
   const router = useRouter();
-  const [state, setState] = useContext(UserContext);
+  const [state] = useContext(UserContext);
   const handleChange = (e, change) => {
     const selectedSource = e;
     if (!examContext[change].includes(selectedSource)) {
@@ -35,8 +34,16 @@ function Page() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (examContext.count > 400) {
-      toast.error("Count must be smaller than 400");
+    if (examContext.count > 220) {
+      toast.error("Count must be smaller than 220");
+      return;
+    }
+    if (examContext.sources < 1) {
+      toast.error("Please select a source");
+      return;
+    }
+    if (examContext.subjects < 1) {
+      toast.error("Please select a subject");
       return;
     }
 
@@ -204,18 +211,24 @@ function Page() {
             <div className="footer w-full">
               <div className="flex lg:flex-row max-sm:flex-col justify-around items-center">
                 <div className="count">
-                  <Input
-                    type="number"
-                    placeholder="Count"
-                    max={400}
-                    defaultValue={examContext.count}
-                    onChange={(e) =>
-                      setExamContext({
-                        ...examContext,
-                        count: Number(e.target.value),
-                      })
-                    }
-                  />
+                  <div className="flex flex-col">
+                    <Label className="my-2"> Number of questions </Label>
+                    <Input
+                      type="number"
+                      placeholder="Count"
+                      max={220}
+                      defaultValue={examContext.count}
+                      onChange={(e) =>
+                        setExamContext({
+                          ...examContext,
+                          count: Number(e.target.value),
+                        })
+                      }
+                    />
+                    <span className="text-sm text-gray-500 my-2">
+                      (220 max)
+                    </span>
+                  </div>
                 </div>
                 <Button
                   onClick={handleSubmit}

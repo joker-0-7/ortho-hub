@@ -70,7 +70,7 @@ const PaymentPage = ({ params }) => {
 
       if (!window.paypal) {
         const script = document.createElement("script");
-        script.src = `https://www.paypal.com/sdk/js?client-id=AbCQV8oePwik7JA9nvSi8pDbrh1cAqX51nwvAYC_TFhZ9SrbGPGNz8Z5DBoIr7xNjAiCqbruPz77sow9`;
+        script.src = `https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_ID}`;
         script.addEventListener("load", renderPayPalButtons);
         document.body.appendChild(script);
       } else {
