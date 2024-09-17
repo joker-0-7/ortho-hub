@@ -49,13 +49,13 @@ export default function InputForm({ params }) {
       const result = await res.json();
       if (result.success) {
         toast.success(result.msg);
-        form.reset({ name: result.sources.name });
+        form.reset({ name: result.source.name });
       } else {
         toast.error(result.msg);
       }
     } catch (error) {
       console.error(error);
-      toast.error(error?.response?.data?.msg || "Error add sources");
+      toast.error(error?.response?.data?.msg || "Error update sources");
     }
   }
   const getSource = async () => {

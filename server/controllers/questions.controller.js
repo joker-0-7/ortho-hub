@@ -126,7 +126,6 @@ const createExam = CatchAsyncError(async (req, res, next) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-
 const getQuestion = CatchAsyncError(async (req, res, next) => {
   try {
     const question = await questionModel.findById(req.params.id).exec();
@@ -200,7 +199,6 @@ const addQuestion = CatchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 400));
   }
 });
-
 const updateQuestion = CatchAsyncError(async (req, res, next) => {
   const id = req.params.id;
   const data = req.body;
@@ -241,7 +239,6 @@ const updateQuestion = CatchAsyncError(async (req, res, next) => {
     return next(new ErrorHandler(error.message, 400));
   }
 });
-
 // sources
 const addSource = CatchAsyncError(async (req, res, next) => {
   const data = req.body;
@@ -277,16 +274,20 @@ const getSource = CatchAsyncError(async (req, res, next) => {
 const updateSource = CatchAsyncError(async (req, res, next) => {
   const id = req.params.id;
   const data = req.body;
-  console.log(data);
   try {
-    const subject = await SourceModal.findByIdAndUpdate(
+    const oldSource = await SourceModal.findById(id);
+    const source = await SourceModal.findByIdAndUpdate(
       id,
       { name: data.name },
       { new: true }
     );
+    const updateQuestionsSource = await questionModel.updateMany(
+      { sources: oldSource.name },
+      { $set: { "sources.$": source.name } }
+    );
     return res
       .status(200)
-      .json({ success: true, msg: "Done updated subject", subject });
+      .json({ success: true, msg: "Done updated source", source });
   } catch (error) {
     return next(new ErrorHandler(error.message, 400));
   }
@@ -345,20 +346,28 @@ const getSubject = CatchAsyncError(async (req, res, next) => {
 const updateSubject = CatchAsyncError(async (req, res, next) => {
   const id = req.params.id;
   const data = req.body;
-  console.log(data);
   try {
+    const oldSubject = await SubjectModal.findById(id);
     const subject = await SubjectModal.findByIdAndUpdate(
       id,
       { name: data.name },
       { new: true }
     );
-    return res
-      .status(200)
-      .json({ success: true, msg: "Done updated subject", subject });
+    const updateQuestionsSubject = await questionModel.updateMany(
+      { subjects: oldSubject.name },
+      { $set: { "subjects.$": subject.name } }
+    );
+    return res.status(200).json({
+      success: true,
+      msg: "Done updated subject",
+      subject,
+    });
   } catch (error) {
+    console.log(error);
     return next(new ErrorHandler(error.message, 400));
   }
 });
+
 const deleteSubject = CatchAsyncError(async (req, res, next) => {
   const id = req.params.id;
   try {

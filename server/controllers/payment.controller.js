@@ -48,6 +48,7 @@ const captureOrder = async (req, res, next) => {
     const user = await userModel.findById(userID);
     if (user) {
       user.isVerified = true;
+      user.isReset = false;
       user.subscriptionEnd = new Date();
       user.subscriptionEnd.setMonth(user.subscriptionEnd.getMonth() + 3);
       await user.save();

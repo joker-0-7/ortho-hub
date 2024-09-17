@@ -3,7 +3,7 @@ import { UserContext } from "@/app/context/User";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 
 export default function Page() {
   const [state, setState] = useContext(UserContext);
