@@ -77,7 +77,13 @@ const UserProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const excludedPaths = ["login", "register", "payment", "free-trial"];
+    const excludedPaths = [
+      "login",
+      "register",
+      "payment",
+      "free-trial",
+      "forget-password",
+    ];
 
     const isExcludedPath = excludedPaths.some((excludedPath) =>
       pathName.includes(excludedPath)

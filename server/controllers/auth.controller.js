@@ -1,4 +1,5 @@
 const { CatchAsyncError } = require("../middlewares/CatchAsyncError");
+const bcrypt = require("bcrypt");
 const userModel = require("../models/user.model");
 const { ErrorHandler } = require("../utils/ErrorHandler");
 const jwt = require("jsonwebtoken");
@@ -126,7 +127,7 @@ const loginAdmin = async (req, res) => {
 };
 
 const freeTrail = async (req, res) => {
-  const id = new mongoose.Types.ObjectId(); // generate a valid ObjectId
+  const id = new mongoose.Types.ObjectId();
   const accessToken = jwt.sign(
     { id: id.toString(), type: "free" },
     process.env.ACCESS_TOKEN,
@@ -147,6 +148,61 @@ const freeTrail = async (req, res) => {
   });
 };
 
+const sendPassword = CatchAsyncError(async (req, res, next) => {
+  const templatePath = path.join(__dirname, "../mails/reset-password-mail.ejs");
+  try {
+    const email = req.body.email;
+    const existEmail = await userModel.findOne({ email });
+    if (!existEmail) return next(new ErrorHandler("Email not found", 400));
+    const activationToken = createActivationToken(existEmail);
+    const activationCode = activationToken.activationCode;
+    const data = { user: { name: existEmail.firstName }, activationCode };
+    const html = await ejs.renderFile(templatePath, data);
+    try {
+      await sendMail({
+        email: email,
+        subject: "Account activation",
+        template: "reset-password-mail.ejs",
+        data,
+      });
+      return res.status(200).json({
+        message: authMsg.SUCCESS_REGISTRATION(email),
+        activationToken: activationToken.token,
+      });
+    } catch (error) {
+      console.log(error);
+      return next(new ErrorHandler(authMsg.ERROR_SEND_CODE, 400));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+const confirmCode = CatchAsyncError(async (req, res, next) => {
+  try {
+    const { activation_token, activation_code, password } = req.body;
+    const newUser = jwt.verify(activation_token, process.env.ACTIVATION_SECRET);
+    if (newUser.activationCode !== activation_code) {
+      return next(new ErrorHandler(authMsg.iNVALID_CODE, 400));
+    }
+    const { email } = newUser.user;
+    const existUser = await userModel.findOne({ email });
+    console.log(activation_token, activation_code);
+    if (!existUser) {
+      return next(new ErrorHandler(authMsg.EXIST_USER, 400));
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(password, salt);
+    const user = await userModel.findOneAndUpdate(
+      { email },
+      { password: hash }
+    );
+    res.status(200).json({ success: true, user });
+  } catch (error) {
+    console.log(error);
+    return next(new ErrorHandler(error.message, 400));
+  }
+});
 module.exports = {
   register,
   activateUser,
@@ -154,4 +210,6 @@ module.exports = {
   current,
   loginAdmin,
   freeTrail,
+  sendPassword,
+  confirmCode,
 };

@@ -96,6 +96,7 @@ function UserRouter({ children }) {
       "un-authorize",
       "payment",
       "free-trial",
+      "forget-password",
     ];
     if (allowedPaths.some((path) => pathName.split("/").includes(path))) {
       setOk(true);

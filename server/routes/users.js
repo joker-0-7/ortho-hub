@@ -5,6 +5,8 @@ const {
   loginUser,
   current,
   freeTrail,
+  sendPassword,
+  confirmCode,
 } = require("../controllers/auth.controller");
 const {
   createOrder,
@@ -69,5 +71,7 @@ router.get("/contact-us/:id", verifyToken, isAdmin, contactUsOne);
 router.delete("/contact-us/:id", verifyToken, isAdmin, deleteMessage);
 router.get("/contact-count/", verifyToken, isAdmin, contactUsCount);
 router.get("/search/:query", search);
+router.post("/send-password", sendPassword);
+router.post("/confirm-code", confirmCode);
 
 module.exports = router;

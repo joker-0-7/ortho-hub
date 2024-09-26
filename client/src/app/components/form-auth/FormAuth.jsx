@@ -87,6 +87,9 @@ function FormAuth({
                     type="password"
                     placeholder="Password"
                   />
+                  <div className="text-right my-2">
+                    <Link href="/user/forget-password">forget password ?</Link>
+                  </div>
                 </>
               )}
               {success && (
