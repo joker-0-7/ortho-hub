@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Banner from "./components/Banner";
+import { BsCurrencyPound } from "react-icons/bs";
 
 export default function Home() {
   const router = useRouter();
@@ -254,9 +255,14 @@ export default function Home() {
                     90-Day Access
                   </p>
                   <div className="mt-4 flex items-center justify-center text-5xl font-extrabold text-white">
-                    <span>$90.00</span>
+                    <span className="flex">
+                      <span>
+                        <BsCurrencyPound />
+                      </span>
+                      <span>90.00</span>
+                    </span>
                     <span className="ml-3 text-xl font-medium text-gray-50">
-                      USD
+                      GBP
                     </span>
                   </div>
                   <div className="mt-6">

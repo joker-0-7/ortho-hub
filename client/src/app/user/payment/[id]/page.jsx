@@ -97,9 +97,6 @@ const PaymentPage = ({ params }) => {
               <CardTitle>QBank</CardTitle>
               <CardDescription className="relative ">
                 <del> 90-day access </del>
-                {/* <span
-                  className={`absolute ${style.iconLine} bg-red-500`}
-                ></span>{" "} */}
               </CardDescription>
               <CardDescription className="text-red-500">
                 120-day access
@@ -110,10 +107,10 @@ const PaymentPage = ({ params }) => {
                   <span
                     className={`absolute ${style.iconLine} bg-red-500`}
                   ></span>
-                </span>{" "}
+                </span>
                 <span className="absolute -left-7 -top-2 ">
                   <BsCurrencyPound />
-                </span>{" "}
+                </span>
                 <span className="text-red-500 "> 68.00 </span>
               </CardDescription>
             </CardHeader>
