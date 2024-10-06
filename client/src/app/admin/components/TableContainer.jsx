@@ -34,8 +34,15 @@ function TableContainer({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {dataBody.map((data) => (
+        {dataBody.map((data, index) => (
           <TableRow key={data._id}>
+            {page === "questions" && (
+              <TableCell
+                className={`font-medium ${page === "users" && "text-center"} `}
+              >
+                {index + 1}
+              </TableCell>
+            )}
             <TableCell
               className={`font-medium ${page === "users" && "text-center"} `}
             >

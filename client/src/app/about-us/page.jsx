@@ -1,7 +1,5 @@
 "use client";
 import Image from "next/image";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import MainNav from "../components/MainNav";
 
 export default function Page() {
@@ -10,8 +8,8 @@ export default function Page() {
       <nav>
         <MainNav />
       </nav>
-      <div className="w-full bg-background">
-        <section className="container mx-auto flex justify-center items-center min-h-screen">
+      <div className="w-full bg-background pt-20">
+        <section className="container mx-auto flex justify-center items-center min-h-all">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-16 justify-center items-center">
             <div className="space-y-6">
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">

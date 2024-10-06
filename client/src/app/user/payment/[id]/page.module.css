@@ -1,0 +1,8 @@
+.iconLine {
+  content: "";
+  width: 100%;
+  height: 2px;
+  left: 0;
+  top: 50%;
+  transform: rotate(-20deg);
+}

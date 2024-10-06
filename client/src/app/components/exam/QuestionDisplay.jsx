@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Modal } from "antd";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import parse from "html-react-parser";
 import Image from "next/image";
 import {
@@ -153,7 +153,9 @@ const QuestionDisplay = ({
                     (showAns || checkedAns(exam._id)) &&
                     exam.correct === ans
                       ? "bg-green-200"
-                      : ""
+                      : (showAns || checkedAns(exam._id)) &&
+                        exam.correct !== ans &&
+                        "bg-red-200"
                   } ${
                     (isChecked(exam._id, ans) || checked === ans) &&
                     "border-sky-400 shadow-md border-2"

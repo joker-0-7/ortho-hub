@@ -14,8 +14,8 @@ const createOrder = CatchAsyncError(async (req, res) => {
     purchase_units: [
       {
         amount: {
-          currency_code: "USD",
-          value: "90.00",
+          currency_code: "GBP",
+          value: "68.00",
         },
       },
     ],

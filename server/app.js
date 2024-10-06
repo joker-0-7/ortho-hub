@@ -11,6 +11,7 @@ var questionsRouter = require("./routes/question");
 const { connectDB } = require("./utils/db");
 const compression = require("compression");
 const ErrorMiddleware = require("./middlewares/error");
+// const { csrfProtection } = require("./middlewares/csrf");
 var app = express();
 app.use(compression());
 
@@ -31,6 +32,9 @@ app.use(
   "/api/v1/public/images",
   express.static(path.join(__dirname, "/uploads/questions"))
 );
+// app.get("/api/v1/csrf-token", csrfProtection, (req, res) => {
+//   res.json({ csrfToken: req.csrfToken() });
+// });
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

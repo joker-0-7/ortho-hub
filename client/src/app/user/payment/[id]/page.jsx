@@ -11,7 +11,8 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { UserContext } from "@/app/context/User";
-
+import { BsCurrencyPound } from "react-icons/bs";
+import style from "./page.module.css";
 const PaymentPage = ({ params }) => {
   const router = useRouter();
   const userID = params.id;
@@ -70,7 +71,7 @@ const PaymentPage = ({ params }) => {
 
       if (!window.paypal) {
         const script = document.createElement("script");
-        script.src = `https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_ID}`;
+        script.src = `https://www.paypal.com/sdk/js?client-id=${process.env.NEXT_PUBLIC_PAYPAL_ID}&currency=GBP`;
         script.addEventListener("load", renderPayPalButtons);
         document.body.appendChild(script);
       } else {
@@ -94,9 +95,26 @@ const PaymentPage = ({ params }) => {
           <Card className="py-3 px-6 lg:min-w-fit max-sm:min-w-full min-h-half flex justify-around flex-col items-center text-center">
             <CardHeader>
               <CardTitle>QBank</CardTitle>
-              <CardDescription>90-day access</CardDescription>
+              <CardDescription className="relative ">
+                <del> 90-day access </del>
+                {/* <span
+                  className={`absolute ${style.iconLine} bg-red-500`}
+                ></span>{" "} */}
+              </CardDescription>
+              <CardDescription className="text-red-500">
+                120-day access
+              </CardDescription>
               <CardDescription className="text-3xl relative font-bold w-fit mx-auto text-vDark my-3">
-                90 <span className="absolute -left-5 -top-2 ">$</span>
+                <span className="relative block mx-auto">
+                  90.00
+                  <span
+                    className={`absolute ${style.iconLine} bg-red-500`}
+                  ></span>
+                </span>{" "}
+                <span className="absolute -left-7 -top-2 ">
+                  <BsCurrencyPound />
+                </span>{" "}
+                <span className="text-red-500 "> 68.00 </span>
               </CardDescription>
             </CardHeader>
             <CardContent>

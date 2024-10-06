@@ -9,6 +9,7 @@ import Loader from "./components/loader/Loader";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Banner from "./components/Banner";
 
 export default function Home() {
   const router = useRouter();
@@ -26,6 +27,7 @@ export default function Home() {
         <MainNav />
       </nav>
       <div className="pt-20 min-h-all">
+        <Banner />
         <section
           className={`${styles.img} lg:min-h-all max-sm:h-all relative overflow-hidden`}
         >

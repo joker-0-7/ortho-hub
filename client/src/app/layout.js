@@ -3,6 +3,7 @@ import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Head from "next/head";
+import Script from "next/script";
 
 const cairo = Cairo({ subsets: ["latin"] });
 
@@ -64,6 +65,17 @@ export default function RootLayout({ children }) {
           />
           {children}
         </div>
+        <Script
+          id="gtag-init"
+          defer
+          src="https://www.googletagmanager.com/gtag/js?id=G-R4SC8WJ82L"
+        ></Script>
+        <Script id="gtag-config">
+          {`window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-R4SC8WJ82L');`}
+        </Script>
       </body>
     </html>
   );

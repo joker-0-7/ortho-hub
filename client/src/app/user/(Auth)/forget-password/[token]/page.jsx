@@ -38,6 +38,7 @@ function Page({ params }) {
       toast.error("Error happened, try again");
       return;
     }
+    toast.success("your password has been reset successfully");
     router.push("/user/login");
   };
   return (
@@ -45,7 +46,7 @@ function Page({ params }) {
       <div className="container mx-auto ">
         <div>
           <div
-            class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+            className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
             role="alert"
           >
             {msg}
