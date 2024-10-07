@@ -48,12 +48,16 @@ const MainNav = () => {
           ))}
         </ul>
         <div className="hidden md:flex items-center justify-between">
-          <Button className="bg-main text-light px-5 py-2 mx-2 rounded-lg border-2 border-main">
-            <Link href="/user/login">Login</Link>
-          </Button>
-          <Button className="bg-transparent text-main px-5 py-2 rounded-lg border-main border-2 hover:bg-main hover:text-light duration-200">
-            <Link href="/user/register">Register</Link>
-          </Button>
+          <Link href="/user/login">
+            <Button className="bg-main text-light px-5 py-2 mx-2 rounded-lg border-2 border-main">
+              Login
+            </Button>
+          </Link>
+          <Link href="/user/register">
+            <Button className="bg-transparent text-main px-5 py-2 rounded-lg border-main border-2 hover:bg-main hover:text-light duration-200">
+              Register
+            </Button>
+          </Link>
         </div>
         <div
           onClick={() => setNav(!nav)}
@@ -78,12 +82,16 @@ const MainNav = () => {
                 className="flex items-center justify-between w-full px-9"
                 style={{ zIndex: 99 }}
               >
-                <Button className="bg-main text-light px-5 py-2 mx-2 rounded-lg border-2 border-main">
-                  <Link href="/user/login">Login</Link>
-                </Button>
-                <Button className="bg-transparent text-main px-5 py-2 rounded-lg border-main border-2 hover:bg-main hover:text-light duration-200">
-                  <Link href="/user/register">Register</Link>
-                </Button>
+                <Link href="/user/login">
+                  <Button className="bg-main text-light px-5 py-2 mx-2 rounded-lg border-2 border-main">
+                    Login
+                  </Button>
+                </Link>
+                <Link href="/user/register">
+                  <Button className="bg-transparent text-main px-5 py-2 rounded-lg border-main border-2 hover:bg-main hover:text-light duration-200">
+                    Register
+                  </Button>
+                </Link>
               </div>
             </ul>
           </>

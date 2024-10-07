@@ -5,10 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import React, { useContext, useState } from "react";
 import { toast } from "react-toastify";
+import { ExclamationCircleFilled } from "@ant-design/icons";
+import { Modal } from "antd";
 
 function Page() {
   const [state] = useContext(UserContext);
   const [password, setPassword] = useState("");
+  const { confirm } = Modal;
   const updatePassword = async () => {
     try {
       const response = await fetch(
@@ -34,10 +37,28 @@ function Page() {
   const reset = async () => {
     await resetInformation(state.accessToken)
       .then(() => toast.success("success reset"))
-      .catch(() => toast.error("error reset"));
+      .catch(() =>
+        toast.error("You have exceeded the limit, contact us if you need help")
+      );
+  };
+  const showPromiseConfirm = () => {
+    confirm({
+      title: "This future is allowed once",
+      icon: <ExclamationCircleFilled />,
+      content: "Are you sure you want to proceed",
+      okType: "danger",
+      onOk() {
+        return new Promise((resolve, reject) => {
+          reset().then(resolve).catch(reject);
+        }).catch(() => console.log("Oops, errors occurred!"));
+      },
+      onCancel() {
+        console.log("Cancelled");
+      },
+    });
   };
   return (
-    <div className="user-account">
+    <div className="user-account pt-20">
       <div className="container">
         <section className="flex justify-evenly flex-col min-h-screen">
           <div className="title text-center">
@@ -91,7 +112,7 @@ function Page() {
               </Button>
               <Button
                 className="bg-red-700 hover:bg-red-600 duration-200 lg:w-auto max-sm:w-full"
-                onClick={reset}
+                onClick={showPromiseConfirm}
               >
                 Reset Information
               </Button>

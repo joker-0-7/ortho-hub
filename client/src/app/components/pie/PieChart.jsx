@@ -10,7 +10,7 @@ const PieChart = ({ arrData, labels }) => {
     labels: labels,
     datasets: [
       {
-        label: "# of Votes",
+        label: "# of Questions",
         data: arrData,
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
