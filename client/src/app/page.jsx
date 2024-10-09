@@ -29,17 +29,13 @@ export default function Home() {
       </nav>
       <div className="pt-20 min-h-all">
         <Banner />
-        <section
-          className={`${styles.img} lg:min-h-all max-sm:h-all relative overflow-hidden`}
-        >
+        <section className={`${styles.img}  relative overflow-hidden`}>
           <div
             className={`${styles.overlay} bg-dark bg-opacity-70 min-h-full w-full absolute`}
           ></div>
           <div className="container mx-auto">
-            <div
-              className={`first-sec lg:min-h-all max-sm:min-h-all py-5 ${styles.first}`}
-            >
-              <div className="sm:w-full flex flex-col justify-evenly lg:min-h-all max-sm:min-h-all text-center">
+            <div className={`first-sec py-5 ${styles.first}`}>
+              <div className="sm:w-full flex flex-col justify-evenly text-center">
                 <div className="flex justify-evenly items-center lg:min-h-[74vh] max-sm:min-h-all flex-col">
                   <div className="title">
                     <h1 className="lg:text-6xl max-sm:text-4xl font-bold text-light">
@@ -61,9 +57,11 @@ export default function Home() {
                     </p>
                   </div>
                   <div className="flex items-center justify-center">
-                    <Button className="bg-main text-light px-5 py-2 rounded-lg border-2 border-main">
-                      <Link href="/user/free-trial">Start Free Trial!!</Link>
-                    </Button>
+                    <Link href="/user/free-trial">
+                      <Button className="bg-main text-light px-5 py-2 rounded-lg border-2 border-main">
+                        Start Free Trial!!
+                      </Button>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -267,12 +265,12 @@ export default function Home() {
                   </div>
                   <div className="mt-6">
                     <div className="rounded-md shadow">
-                      <a
-                        href="#"
+                      <Link
+                        href="/user/register"
                         className="flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-main hover:bg-mainD duration-200"
                       >
                         Join us now
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>

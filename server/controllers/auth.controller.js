@@ -187,7 +187,6 @@ const confirmCode = CatchAsyncError(async (req, res, next) => {
     }
     const { email } = newUser.user;
     const existUser = await userModel.findOne({ email });
-    console.log(activation_token, activation_code);
     if (!existUser) {
       return next(new ErrorHandler(authMsg.EXIST_USER, 400));
     }

@@ -11,20 +11,25 @@ function Page() {
     lastName: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
   const [success, setSuccess] = useState(false);
   const [activationToken, setActivationToken] = useState("");
   const [activationCode, setActivationCode] = useState("");
   const [disable, setDisable] = useState(false);
   const [msg, setMsg] = useState("");
+  const [show, setShow] = useState(false);
   const router = useRouter();
   const handleChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
   const handleSubmit = async () => {
+    if (user.password !== user.confirmPassword) {
+      toast.error("The passwords do not match");
+      return;
+    }
     try {
       setDisable(true);
-
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API}/users/register`,
         {
@@ -79,6 +84,9 @@ function Page() {
       })
       .catch((err) => console.error(err));
   };
+  const changeType = () => {
+    setShow(!show);
+  };
   return (
     <div className="register">
       <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
@@ -89,6 +97,8 @@ function Page() {
           handleChange={handleChange}
           handleSubmit={handleSubmit}
           user={user}
+          show={show}
+          changeType={changeType}
           success={success}
           setActivationCode={setActivationCode}
           confirmEmail={confirmEmail}

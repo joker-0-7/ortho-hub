@@ -11,14 +11,21 @@ import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+import PasswordInput from "@/app/components/PasswordInput";
 
 function Page({ params }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [activationCode, setActivationCode] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [show, setShow] = useState(false);
   const msg = searchParams.get("msg");
   const confirmCode = async () => {
+    if (password !== confirmPassword) {
+      toast.error("The passwords do not match");
+      return;
+    }
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API}/users/confirm-code`,
       {
@@ -35,11 +42,19 @@ function Page({ params }) {
     );
     const data = await response.json();
     if (!response.ok) {
-      toast.error("Error happened, try again");
+      if (data.message === "jwt expired") {
+        toast.error("the code is expired, try again");
+        return;
+      }
+      toast.error(data.message);
+      console.log(data);
       return;
     }
     toast.success("your password has been reset successfully");
     router.push("/user/login");
+  };
+  const changeType = () => {
+    setShow(!show);
   };
   return (
     <div className="code-password min-h-all flex justify-center items-center">
@@ -53,11 +68,27 @@ function Page({ params }) {
           </div>
         </div>
         <div className="new-password">
-          <Input
+          {/* <Input
             type="password"
             placeholder="New password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            show={show}
+            changeType={changeType}
+          /> */}
+          <PasswordInput
+            placeholder="New password"
+            name="password"
+            val={password}
+            handleChange={(e) => setPassword(e.target.value)}
+            show={show}
+            changeType={changeType}
+          />
+          <PasswordInput
+            placeholder="Confirm password"
+            val={confirmPassword}
+            handleChange={(e) => setConfirmPassword(e.target.value)}
+            show={show}
           />
         </div>
         <div className="my-5">

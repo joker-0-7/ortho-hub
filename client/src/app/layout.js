@@ -67,14 +67,17 @@ export default function RootLayout({ children }) {
         </div>
         <Script
           id="gtag-init"
-          defer
           src="https://www.googletagmanager.com/gtag/js?id=G-R4SC8WJ82L"
+          strategy="lazyOnload"
         ></Script>
-        <Script id="gtag-config">
-          {`window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-R4SC8WJ82L');`}
+
+        <Script id="gtag-config" strategy="lazyOnload">
+          {`
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-R4SC8WJ82L');
+  `}
         </Script>
       </body>
     </html>

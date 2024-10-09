@@ -11,6 +11,7 @@ function Page() {
   const searchParams = useSearchParams();
   const msg = searchParams.get("msg");
   const [state, setState] = useContext(UserContext);
+  const [show, setShow] = useState(false);
   const [disable, setDisable] = useState(false);
   const [user, setUser] = useState({
     email: "",
@@ -67,7 +68,9 @@ function Page() {
     }
     setDisable(false);
   };
-
+  const changeType = () => {
+    setShow(!show);
+  };
   return (
     <div className="login">
       <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
@@ -76,6 +79,8 @@ function Page() {
           page="login"
           user={user}
           msg={msg}
+          show={show}
+          changeType={changeType}
           handleChange={handleChange}
           freeTrial={() => router.push("/user/free-trial")}
           handleSubmit={handleSubmit}

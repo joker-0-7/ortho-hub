@@ -9,6 +9,8 @@ import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { AiFillEye } from "react-icons/ai";
+import PasswordInput from "../PasswordInput";
 
 function FormAuth({
   page,
@@ -22,6 +24,8 @@ function FormAuth({
   msg,
   disable,
   freeTrial,
+  show,
+  changeType,
 }) {
   return (
     <div className="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
@@ -38,7 +42,7 @@ function FormAuth({
           <p className="text-gray-500 dark:text-gray-400 text-center py-5">
             {msg && (
               <div
-                class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+                className="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
                 role="alert"
               >
                 {msg}
@@ -79,17 +83,54 @@ function FormAuth({
                     type="email"
                     placeholder="Email"
                   />
-                  <Input
-                    name="password"
-                    value={user.password}
-                    onChange={handleChange}
-                    className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                    type="password"
+                  {/* <div className="password relative w-full">
+                    <span
+                      className="absolute -translate-y-1/2 top-1/2 right-3 cursor-pointer"
+                      onClick={changeType}
+                    >
+                      <AiFillEye />
+                    </span>
+                    <Input
+                      name="password"
+                      value={user.password}
+                      onChange={handleChange}
+                      className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                      type={show ? "text" : "password"}
+                      placeholder="Password"
+                    />
+                  </div> */}
+                  <PasswordInput
+                    changeType={changeType}
                     placeholder="Password"
+                    name="password"
+                    val={user.password}
+                    show={show}
+                    handleChange={handleChange}
                   />
-                  <div className="text-right my-2">
-                    <Link href="/user/forget-password">forget password ?</Link>
-                  </div>
+                  {page === "login" ? (
+                    <div className="text-right my-2">
+                      <Link href="/user/forget-password">
+                        forget password ?
+                      </Link>
+                    </div>
+                  ) : (
+                    // <Input
+                    //   name="confirmPassword"
+                    //   value={user.confirmPassword}
+                    //   onChange={handleChange}
+                    //   className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
+                    //   type={show ? "text" : "password"}
+                    //   placeholder="Confirm Password"
+                    // />
+                    <PasswordInput
+                      changeType={changeType}
+                      placeholder="Confirm Password"
+                      name="confirmPassword"
+                      val={user.confirmPassword}
+                      show={show}
+                      handleChange={handleChange}
+                    />
+                  )}
                 </>
               )}
               {success && (
